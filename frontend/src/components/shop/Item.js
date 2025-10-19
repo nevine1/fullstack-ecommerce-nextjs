@@ -1,10 +1,10 @@
 import React from 'react'
 import Image from 'next/image'
-const Item = (props) => {
+const Item = ({props: product}) => {
   return (
     <div className="w-[350px] hove:scale-105 transition-all duration-300">
       <Image
-        src={props.image}
+        src={product?.image}
         alt="item image"
         width={100}
         height={100}
