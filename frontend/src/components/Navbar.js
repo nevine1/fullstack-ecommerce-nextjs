@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { IoCartOutline } from "react-icons/io5";
 import { MdFilterList } from "react-icons/md";
+import { CiSearch } from "react-icons/ci";
 
 const Navbar = () => {
   const router = useRouter();
@@ -24,7 +25,7 @@ const Navbar = () => {
   ];
 
   return (
-    <div className="navbar w-full flex flex-row justify-between shadow-md border-b-gray-400 h-20 px-6 md:px-20 py-4 items-center">
+    <div className="navbar w-full flex flex-row justify-between items-center shadow-md border-b-gray-400  h-20 px-6 md:px-20 py-4 items-center">
      
       <div className="flex items-center gap-2">
         <Image
@@ -40,6 +41,15 @@ const Navbar = () => {
         </p>
       </div>
 
+      <div className="flex items-center justify-between px-4 border border-gray-400 outline-gray-200  rounded-full h-[36px] bg-white max-w-sm">
+        <input type="text"
+          placeholder="Search ..."
+          className="rounded-full focus:outline-none "
+        />
+        <div className="">
+          <CiSearch/>
+        </div>
+      </div>
     
       <ul className="hidden md:flex flex-row gap-8 mx-auto justify-center items-center">
         {menuItems.map((item) => (
