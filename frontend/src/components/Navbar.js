@@ -7,6 +7,8 @@ import { useRouter, usePathname } from "next/navigation";
 import { IoCartOutline } from "react-icons/io5";
 import { MdFilterList } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
+import { FaRegUser } from "react-icons/fa";
+
 
 const Navbar = () => {
   const router = useRouter();
@@ -75,22 +77,22 @@ const Navbar = () => {
 
       {/* Right section (Login + Cart) */}
       <div className="flex flex-row gap-3 items-center">
-        <button
-          className="bg-white border-gray-300 border-2 px-6 py-1 
-          rounded-full cursor-pointer active:bg-gray-200"
-        >
-          Login
-        </button>
+       
+        <FaRegUser size="24" /> 
+        
         <div className="relative">
-          <IoCartOutline className="cursor-pointer w-8 h-8" />
+          <IoCartOutline className="cursor-pointer w-8 h-8 " />
           <div
-            className="absolute top-[-6px] right-[-6px] w-[18px] h-[18px] 
+            className="absolute top-[-6px]  right-[-6px] w-[18px] h-[18px] 
             text-[10px] rounded-full flex items-center justify-center 
             text-white bg-red-500"
           >
             0
           </div>
         </div>
+
+        <button className="px-3 py-1  rounded-full text-sm text-blue-500 hover:bg-blue-400 border hover:border-blue-500 hover:text-white duration-300 transition-all">Login</button>
+
       </div>
 
       {/* Mobile menu icon */}
