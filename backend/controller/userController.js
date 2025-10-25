@@ -1,4 +1,6 @@
-
+import User from '../models/userModel.js'
+import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
 const registerUser = async (req, res) => {
     try {
         const { name, email, password, confirmPassword } = req.body;
@@ -10,8 +12,35 @@ const registerUser = async (req, res) => {
             }) 
           
         }
-
+//validation for email, name, password;
+        if (!email) { 
+              console.error("Validation Error: Email is missing.");
+              return res.status(400).json({ success: false, message: "Email is required." });
+            }
+            if (!validator.isEmail(email)) {
+              console.error("Validation Error: Invalid email format.");
+              return res.status(400).json({ success: false, message: "Please enter a valid email." });
+            }
+        
+            if (!password) { 
+              console.error("Validation Error: Password is missing.");
+              return res.status(400).json({ success: false, message: "Password is required." });
+            }
+            if (password.length < 5) {
+              console.error("Validation Error: Password too short.");
+              return res.status(400).json({ success: false, message: "Password should be more than 5 characters." });
+        }
+        if (!confirmPassword) { 
+              console.error("Validation Error: confirmPassword is missing.");
+              return res.status(400).json({ success: false, message: "confirmPassword is required." });
+            }
+            if (confirmPassword.length < 5) {
+              console.error("Validation Error:confirmPassword too short.");
+              return res.status(400).json({ success: false, message: "confirmPassword should be more than 5 characters." });
+        }
+        
         const existingUser = await User.find({ email });
+
         if (existingUser) {
             return res.json({
                 success: false, 
@@ -19,7 +48,7 @@ const registerUser = async (req, res) => {
             })
         }
 
-        const salt = await bcrypt.generateSale(10);
+        const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
        const  hashedConfirmPassword = await bcrypt.hash(confirmPassword, salt)
         const newUserData = {
