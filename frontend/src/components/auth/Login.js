@@ -18,7 +18,7 @@ const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    fullname: "",
+    name: "",
     email: "",
     password: "",
     confirmPassword:"",
@@ -33,11 +33,11 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-     
+      const { name, email, password, confirmPassword } = userInfo;
       //dispatch(setIsLoading(true));
 
       if (mode === "Sign Up") {
-        if (!fullname || !email || !password ) {
+        if (!name || !email || !password ) {
           toast.error("Please fill all fields");
           return;
         }
@@ -50,7 +50,7 @@ const Login = () => {
         if (res.data.success) {
           toast.success(`${name} registered successfully! Please log in.`);
           setMode("login");
-          router.push("/auth/profile")
+          router.push("/auth/login")
         } else {
           toast.error(res.data.message || "Registration failed");
         }

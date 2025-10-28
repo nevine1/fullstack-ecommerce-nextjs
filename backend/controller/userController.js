@@ -68,4 +68,15 @@ console.log('user info are', name, email , password)
   }
 };
 
-export { registerUser };
+
+const login = async (req, res) => {
+  try {
+    
+  } catch (err) {
+    return res.status(500).json({
+      success: false, 
+      message: err.message
+    })
+  }
+}
+export { registerUser, login };
