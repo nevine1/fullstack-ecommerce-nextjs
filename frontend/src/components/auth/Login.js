@@ -10,7 +10,7 @@ import axios from "axios";
 
 const Login = () => {
   const router = useRouter();
- /*  const dispatch = useDispatch(); */
+  //const dispatch = useDispatch();
   const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   
 
@@ -18,7 +18,7 @@ const Login = () => {
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    name: "",
+    fullname: "",
     email: "",
     password: "",
     confirmPassword:"",
@@ -29,27 +29,28 @@ const Login = () => {
     setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
   
-/*
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { name, email, password } = userInfo;
-      dispatch(setIsLoading(true));
+     
+      //dispatch(setIsLoading(true));
 
       if (mode === "Sign Up") {
-        if (!name || !email || !password) {
+        if (!fullname || !email || !password ) {
           toast.error("Please fill all fields");
           return;
         }
-        const res = await axios.post(`${backUrl}/api/users/register`, {
-          name,
-          email,
-          password,
+        const res = await axios.post(`${backUrl}/api/users/register-user`, {
+          name, 
+          email, 
+          password
         });
 
         if (res.data.success) {
           toast.success(`${name} registered successfully! Please log in.`);
           setMode("login");
+          router.push("/auth/profile")
         } else {
           toast.error(res.data.message || "Registration failed");
         }
@@ -64,7 +65,7 @@ const Login = () => {
         });
 
         if (res.data.success && res.data.token) {
-          dispatch(setToken(res.data.token));
+          //dispatch(setToken(res.data.token));
           router.push("/auth/profile");
           toast.success(`Welcome back!`);
         } else {
@@ -74,16 +75,16 @@ const Login = () => {
     } catch (err) {
       toast.error(err.message);
     } finally {
-      dispatch(setIsLoading(false));
+      //dispatch(setIsLoading(false));
     }
-  }; */
+  }; 
 
   
 
   return (
     <div className="flex justify-center items-center min-h-screen  px-4">
       <form
-        /* onSubmit={handleSubmit} */
+        onSubmit={handleSubmit}
         className="w-full max-w-md bg-white shadow-lg border border-gray-200  rounded-2xl p-8 sm:p-10 transition-all duration-300"
       >
         <div className="flex flex-col gap-5">
@@ -161,7 +162,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="mt-2 bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-md transition-all duration-300 shadow-md"
+            className="mt-2 bg-orange-500 cursor-pointer hover:bg-orange-600 text-white font-medium py-2 rounded-md transition-all duration-300 shadow-md"
           >
             {/* {isLoading
               ? "Please wait..."

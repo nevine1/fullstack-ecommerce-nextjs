@@ -91,7 +91,8 @@ const Navbar = () => {
           </div>
         </div>
 
-        <button className="px-3 py-1  rounded-full text-sm text-blue-500 hover:bg-blue-400 border hover:border-blue-500 hover:text-white duration-300 transition-all">Login</button>
+        <button onClick={() =>router.push('/auth/login')}
+          className="px-3 py-1  rounded-full text-sm text-blue-500 hover:bg-blue-400 border hover:border-blue-500 hover:text-white duration-300 transition-all">Login</button>
 
       </div>
 
