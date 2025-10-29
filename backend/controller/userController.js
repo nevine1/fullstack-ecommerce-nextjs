@@ -34,7 +34,7 @@ console.log('user info are', name, email , password)
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message: 'This user already exists.',
+        message: 'This user is already existing!',
       });
     }
 

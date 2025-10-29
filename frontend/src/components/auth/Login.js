@@ -14,7 +14,7 @@ const Login = () => {
   const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   
 
-  const [mode, setMode] = useState("login");
+  const [mode, setMode] = useState("Login");
   const [showPass, setShowPass] = useState(false);
   const [showConfirmPass, setShowConfirmPass] = useState(false);
   const [userInfo, setUserInfo] = useState({
@@ -36,41 +36,34 @@ const Login = () => {
       const { name, email, password, confirmPassword } = userInfo;
       //dispatch(setIsLoading(true));
 
-      if (mode === "Sign Up") {
-        if (!name || !email || !password ) {
+      if (mode === "SignUp") {
+         if (!name || !email || !password || !confirmPassword) {
           toast.error("Please fill all fields");
           return;
         }
-        const res = await axios.post(`${backUrl}/api/users/register-user`, {
-          name, 
-          email, 
-          password
-        });
-
-        if (res.data.success) {
-          toast.success(`${name} registered successfully! Please log in.`);
-          setMode("login");
-          router.push("/auth/login")
-        } else {
-          toast.error(res.data.message || "Registration failed");
+       
+        if (password !== confirmPassword) {
+            toast.error("Passwords do not match");
+            return;
         }
+          const res = await axios.post(`${backUrl}/api/users/register-user`, {
+            name, 
+            email, 
+            password
+          });
+
+          if (res.data.success) {
+              toast.success(`${name} registered successfully! Please log in.`);
+              //setMode("Login");
+              router.push("/")
+            } else {
+              toast.error(res.data.message || "Registration failed");
+          }
+
+        
       } else {
-        if (!email || !password) {
-          toast.error("Email or password cannot be empty");
-          return;
-        }
-        const res = await axios.post(`${backUrl}/api/users/login`, {
-          email,
-          password,
-        });
-
-        if (res.data.success && res.data.token) {
-          //dispatch(setToken(res.data.token));
-          router.push("/auth/profile");
-          toast.success(`Welcome back!`);
-        } else {
-          toast.error(res.data.message || "Login failed");
-        }
+        console.log('login')
+      
       }
     } catch (err) {
       toast.error(err.message);
@@ -90,16 +83,16 @@ const Login = () => {
         <div className="flex flex-col gap-5">
           <div className="text-center">
             <h2 className="text-2xl font-semibold text-gray-800">
-              {mode === "Sign Up" ? "Create Account" : "Welcome Back"}
+              {mode === "SignUp" ? "Create Account" : "Welcome Back"}
             </h2>
             <p className="text-gray-500 mt-1 text-sm">
-              {mode === "Sign Up"
+              {mode === "SignUp"
                 ? "Register to book your appointment"
                 : "Login to continue"}
             </p>
           </div>
 
-          {mode === "Sign Up" && (
+          {mode === "SignUp" && (
             <input
               type="text"
               name="name"
@@ -135,12 +128,12 @@ const Login = () => {
               onClick={() => setShowPass(!showPass)}
               className="absolute right-3 text-gray-600 cursor-pointer hover:text-orange-500 transition"
             >
-              {showPass ? <FaRegEyeSlash size={20} /> : <FaRegEye size={20} />}
+              {showConfirmPass ? <FaRegEye  size={20} /> : <FaRegEyeSlash size={20} />}
             </div>
           </div>
 
           {
-            mode === "Sign Up" && (
+            mode === "SignUp" && (
             <div className="relative flex items-center">
             <input
               type={showConfirmPass ? "text" : "password"}
@@ -155,7 +148,7 @@ const Login = () => {
               onClick={() => setShowConfirmPass(!showConfirmPass)}
               className="absolute right-3 text-gray-600 cursor-pointer hover:text-orange-500 transition"
             >
-              {showConfirmPass ? <FaRegEyeSlash size={20} /> : <FaRegEye size={20} />}
+              {showConfirmPass ? <FaRegEye  size={20} /> : <FaRegEyeSlash size={20} />}
             </div>
           </div>
           )}
@@ -166,31 +159,35 @@ const Login = () => {
           >
             {/* {isLoading
               ? "Please wait..."
-              : mode === "Sign Up"
+              : mode === "SignUp"
               ? "Create Account"
               : "Login"} */}
-            Login
+            {
+              mode === "SignUp" ? "SignUp" : "Login"
+            }
           </button>
 
           <p className="text-center text-sm text-gray-600">
-            {mode === "Sign Up" ? (
+            {mode === "Login" ? (
               <>
-                Already have an account?{" "}
+                
+
+                Don’t have an account?{" "}
                 <span
-                  onClick={() => setMode("login")}
+                  onClick={() => setMode("SignUp")}
                   className="text-orange-600 cursor-pointer hover:underline"
                 >
-                  Log In
+                  SignUp
                 </span>
               </>
             ) : (
               <>
-                Don’t have an account?{" "}
+               Already have an account?{" "}
                 <span
-                  onClick={() => setMode("Sign Up")}
+                  onClick={() => setMode("Login")}
                   className="text-orange-600 cursor-pointer hover:underline"
                 >
-                  Sign Up
+                  Log In
                 </span>
               </>
             )}
