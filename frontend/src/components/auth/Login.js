@@ -62,7 +62,15 @@ const Login = () => {
 
         
       } else {
-        console.log('login')
+        //login code 
+        const res = await axios.post(`${backUrl}/api/users/login-user`, {
+          email, password
+        })
+        console.log('login user is ', res.data)
+        if (res.data.success) {
+          router.push('/');
+          toast.success("has been successfully logged in")
+        }
       
       }
     } catch (err) {

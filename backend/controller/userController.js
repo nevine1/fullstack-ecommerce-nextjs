@@ -78,7 +78,7 @@ const login = async (req, res) => {
         message: "Email or password is missing"
       })
     }
-    const user = await User.findOne(email);
+    const user = await User.findOne({email});
     
     if (!user) {
       return res.status(400).json({
@@ -96,7 +96,13 @@ const login = async (req, res) => {
         data: user,
         token
       })
+    } else {
+            return res.status(400).json({
+                success: false, 
+                message: "nevine , this user email or password is incorrect",
+            }) 
     }
+    
   } catch (err) {
     return res.status(500).json({
       success: false, 
