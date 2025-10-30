@@ -68,10 +68,35 @@ console.log('user info are', name, email , password)
   }
 };
 
-
+//api for login 
 const login = async (req, res) => {
   try {
+    const { email, password } = req.body
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Email or password is missing"
+      })
+    }
+    const user = await User.findOne(email);
     
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "This user is not registered"
+      })
+    }
+
+    const hashedPassword = await bcrypt.compare(password, user.password);
+    if (hashedPassword) {
+      const token = await jwt.sign({ id: user._id}, process.env.JWT_SECRET);
+      return res.status(200).json({
+        success: true,
+        message: "Login successfully", 
+        data: user,
+        token
+      })
+    }
   } catch (err) {
     return res.status(500).json({
       success: false, 
@@ -79,4 +104,6 @@ const login = async (req, res) => {
     })
   }
 }
+
+
 export { registerUser, login };
