@@ -87,8 +87,8 @@ const login = async (req, res) => {
       })
     }
 
-    const hashedPassword = await bcrypt.compare(password, user.password);
-    if (hashedPassword) {
+    const userPassword = await bcrypt.compare(password, user.password); // user.password is coming from database
+    if (userPassword) {
       const token = await jwt.sign({ id: user._id}, process.env.JWT_SECRET);
       return res.status(200).json({
         success: true,
@@ -99,7 +99,7 @@ const login = async (req, res) => {
     } else {
             return res.status(400).json({
                 success: false, 
-                message: "nevine , this user email or password is incorrect",
+                message: "User email or password is incorrect",
             }) 
     }
     
@@ -111,5 +111,25 @@ const login = async (req, res) => {
   }
 }
 
+//api for user profile
+const userProfile = async (req, res) => {
+  const userId = req.user._id;
+  console.log('user id is:', userId)
+  const user = await User.findById(userId).select("-password");
+  if (!user) {
+    return  res.status(400).json({
+        success: false,
+        message: "This user is not found"
+      })
+  }
 
-export { registerUser, login };
+  return  res.status(200).json({
+        success: true,
+        data: user
+      })
+}
+export {
+  registerUser,
+  login, 
+  userProfile
+};
