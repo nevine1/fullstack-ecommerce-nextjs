@@ -113,7 +113,9 @@ const login = async (req, res) => {
 
 //api for user profile
 const userProfile = async (req, res) => {
+
   const userId = req.user._id;
+  
   console.log('user id is:', userId)
   const user = await User.findById(userId).select("-password");
   if (!user) {

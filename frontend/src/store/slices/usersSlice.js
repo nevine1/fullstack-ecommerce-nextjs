@@ -5,12 +5,12 @@ const usersSlice = createSlice({
     initialState: {
         users: [], 
         userInfo: null,
-        token: null,
+        userToken: null,
         isLoading: false, 
         error: null
     }, 
     reducers: {
-        setLoading: (state, action) => {
+        setIsLoading: (state, action) => {
             state.isLoading = action.payload;
         },
         setUserInfo: (state, action) => {
@@ -20,15 +20,15 @@ const usersSlice = createSlice({
             state.users = action.payload
         }, 
         setToken: (state, action) => {
-            state.token = action.payload;
+            state.userToken = action.payload;
         }, 
         uerLogout: (state, action) => {
             state.userInfo = null;
-            state.token = null
+            state.userToken = null
         }
 
     }
 })
 
-export const {setLoading,  getUsers , setToken ,setUserInfo,  uerLogout } = usersSlice.actions; 
+export const {setIsLoading,  getUsers , setToken ,setUserInfo,  uerLogout } = usersSlice.actions; 
 export default usersSlice.reducer;

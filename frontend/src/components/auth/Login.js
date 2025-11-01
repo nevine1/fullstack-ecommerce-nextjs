@@ -68,7 +68,7 @@ const Login = () => {
         })
         console.log('login user is ', res.data)
         if (res.data.success) {
-          router.push('/');
+          router.push('/auth/profile');
           toast.success("has been successfully logged in")
         }
       

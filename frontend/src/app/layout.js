@@ -2,7 +2,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from '../components/mainComponents/Navbar'
-import Footer from '../components/mainComponents/Navbar'
+import Footer from '../components/mainComponents/Footer'
 import { Provider } from "react-redux";
 import { persistor ,store } from '../store/store'
 import { PersistGate } from "redux-persist/integration/react";
