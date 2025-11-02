@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
-
+import { setToken , setIsLoading} from "@/store/slices/usersSlice";
 import { toast } from "react-toastify";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import axios from "axios";
 
 const Login = () => {
   const router = useRouter();
-  //const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
   
 
@@ -32,9 +32,10 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      dispatch(setIsLoading(true));
       const { name, email, password, confirmPassword } = userInfo;
-      //dispatch(setIsLoading(true));
 
       if (mode === "SignUp") {
          if (!name || !email || !password || !confirmPassword) {
@@ -52,10 +53,10 @@ const Login = () => {
             password
           });
 
-          if (res.data.success) {
+        if (res.data.success) {
               toast.success(`${name} registered successfully! Please log in.`);
               //setMode("Login");
-              router.push("/")
+              router.push("/auth/login")
             } else {
               toast.error(res.data.message || "Registration failed");
           }
@@ -66,8 +67,9 @@ const Login = () => {
         const res = await axios.post(`${backUrl}/api/users/login-user`, {
           email, password
         })
-        console.log('login user is ', res.data)
+        console.log('login user is ', res.data.token)
         if (res.data.success) {
+          dispatch(setToken(res.data.token))
           router.push('/auth/profile');
           toast.success("has been successfully logged in")
         }

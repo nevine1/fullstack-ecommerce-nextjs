@@ -114,10 +114,11 @@ const login = async (req, res) => {
 //api for user profile
 const userProfile = async (req, res) => {
 
-  const userId = req.user._id;
+  const id = req.userId; //this userId from the token 
   
-  console.log('user id is:', userId)
-  const user = await User.findById(userId).select("-password");
+  console.log('user id is:', id)
+  const user = await User.findById(id).select("-password");
+
   if (!user) {
     return  res.status(400).json({
         success: false,

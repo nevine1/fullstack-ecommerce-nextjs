@@ -8,12 +8,15 @@ import { IoCartOutline } from "react-icons/io5";
 import { MdFilterList } from "react-icons/md";
 import { CiSearch } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
-
+import { useSelector , useDispatch}  from 'react-redux'
+import { userLogout } from '../../store/slices/usersSlice'
 
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname(); 
+  const dispatch = useDispatch();
 
+  const { userToken } = useSelector((state) => state.users);
   const handleHomeClick = () => {
     router.push("/");
   };
@@ -26,6 +29,9 @@ const Navbar = () => {
     { name: "Kids", href: "/kids" },
   ];
 
+  const Logout = () => {
+    dispatch(userLogout())
+  }
   return (
     <div className="navbar w-full flex flex-row justify-between items-center shadow-md border-b-gray-400  h-20 px-6 md:px-20 py-4 items-center">
      
@@ -91,8 +97,19 @@ const Navbar = () => {
           </div>
         </div>
 
-        <button onClick={() =>router.push('/auth/login')}
-          className="px-3 py-1  rounded-full text-sm text-blue-500 hover:bg-blue-400 border hover:border-blue-500 hover:text-white duration-300 transition-all">Login</button>
+        { 
+          userToken ? (
+          <button onClick={Logout}
+          className="px-3 py-1  rounded-full text-sm text-blue-500 hover:bg-blue-400 border hover:border-blue-500 hover:text-white duration-300 transition-all">
+          Logout
+        </button>
+          ): (
+          <button onClick={() =>router.push('/auth/login')}
+          className="px-3 py-1  rounded-full text-sm text-blue-500 hover:bg-blue-400 border hover:border-blue-500 hover:text-white duration-300 transition-all">
+          Login
+        </button>
+          )
+        }
 
       </div>
 
