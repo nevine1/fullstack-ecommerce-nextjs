@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import logo from "../../assets/logo.png"
 import Link from "next/link";
@@ -15,7 +15,7 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname(); 
   const dispatch = useDispatch();
-
+const [isHydrated, setIsHydrated] = useState(false);
   const { userToken } = useSelector((state) => state.users);
   const handleHomeClick = () => {
     router.push("/");
@@ -29,8 +29,16 @@ const Navbar = () => {
     { name: "Kids", href: "/kids" },
   ];
 
+    useEffect(() => {
+    setIsHydrated(true);
+  }, []);
   const Logout = () => {
     dispatch(userLogout())
+  }
+
+    if (!isHydrated) {
+    //  هنا نمنع الرندر قبل الـ hydration لتجنب mismatch
+    return null;
   }
   return (
     <div className="navbar w-full flex flex-row justify-between items-center shadow-md border-b-gray-400  h-20 px-6 md:px-20 py-4 items-center">

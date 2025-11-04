@@ -2,7 +2,7 @@ import User from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
-
+import connectCloudinary from "../config/cloudinary.js";
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -131,8 +131,58 @@ const userProfile = async (req, res) => {
         data: user
       })
 }
+
+//api to update the user details 
+export const updateUserInfo = async (req, res) => {
+  try {
+    const { userId, name, email } = req.body;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    //  Upload image to Cloudinary (if a new file exists)
+    let updatedImage = user.image;
+    if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "users", // images will go to a "users" folder in your Cloudinary
+      });
+      updatedImage = result.secure_url;
+    }
+
+   
+    const updatedInfo = {
+      name: name || user.name,
+      email: email || user.email,
+      image: updatedImage,
+    };
+
+    
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedInfo, {
+      new: true,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "User has been updated successfully",
+      data: updatedUser,
+    });
+  } catch (err) {
+    console.error("Error updating user:", err);
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 export {
   registerUser,
   login, 
-  userProfile
+  userProfile,
+  updateUserInfo
 };

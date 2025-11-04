@@ -1,30 +1,34 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const usersSlice = createSlice({
-    name: "users", 
+    name: "users",
     initialState: {
-        users: [], 
+        users: [],
         userInfo: null,
         userToken: null,
-        isLoading: false, 
+        isLoading: false,
         error: null
-    }, 
+    },
     reducers: {
         setIsLoading: (state, action) => {
             state.isLoading = action.payload;
         },
         setUserInfo: (state, action) => {
-            state.userInfo = action.payload
+            state.userInfo = action.payload;
+            console.log('redux user deetails is:', action.payload)
         },
         getUsers: (state, action) => {
             state.users = action.payload
-        }, 
+        },
         setToken: (state, action) => {
             state.userToken = action.payload;
-        }, 
+        },
         userLogout: (state, action) => {
             state.userInfo = null;
-            state.userToken = null
+            state.userToken = null;
+            if (typeof window !== 'undefined'){
+                localStorage.removeItem('persist:root');
+            }
         }
 
     }

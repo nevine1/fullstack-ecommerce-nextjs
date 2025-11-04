@@ -20,7 +20,7 @@ const storageFallback = typeof window !== 'undefined' ? storage : createNoopStor
 const persistConfig = {
   key: 'root',
   storage: storageFallback,
-  whitelist: ['users'], //  نحفظ فقط بيانات المستخدم
+  whitelist: ['users'], // نحفظ فقط بيانات المستخدم
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
