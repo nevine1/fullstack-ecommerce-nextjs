@@ -3,7 +3,7 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import dotenv from 'dotenv';
 import userRouter from './routes/userRouter.js';
-
+import connectCloudinary from "./config/cloudinary.js";
 dotenv.config();
 
 const app = express();
@@ -16,7 +16,7 @@ app.use(express.json()); // this line to parse JSON
 
 // Connect database
 connectDB();
-
+connectCloudinary();
 // All project routes
 app.use('/api/users', userRouter);
 

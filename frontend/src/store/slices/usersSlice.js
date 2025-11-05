@@ -13,15 +13,19 @@ const usersSlice = createSlice({
         setIsLoading: (state, action) => {
             state.isLoading = action.payload;
         },
+        setToken: (state, action) => {
+            state.userToken = action.payload;
+        },
         setUserInfo: (state, action) => {
             state.userInfo = action.payload;
-            console.log('redux user deetails is:', action.payload)
+            console.log('redux user details is:', action.payload)
+        },
+        updateUser: (state, action) => {
+            state.userInfo = action.payload;
+            console.log(' redux updated user info is', state.userInfo)
         },
         getUsers: (state, action) => {
             state.users = action.payload
-        },
-        setToken: (state, action) => {
-            state.userToken = action.payload;
         },
         userLogout: (state, action) => {
             state.userInfo = null;
@@ -34,5 +38,5 @@ const usersSlice = createSlice({
     }
 })
 
-export const {setIsLoading,  getUsers , setToken ,setUserInfo,  userLogout } = usersSlice.actions; 
+export const {setIsLoading,  getUsers , setToken ,setUserInfo,  updateUser,  userLogout } = usersSlice.actions; 
 export default usersSlice.reducer;

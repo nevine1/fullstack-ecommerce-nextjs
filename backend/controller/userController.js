@@ -2,7 +2,8 @@ import User from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
-import connectCloudinary from "../config/cloudinary.js";
+import { v2 as cloudinary } from 'cloudinary'
+
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -133,7 +134,8 @@ const userProfile = async (req, res) => {
 }
 
 //api to update the user details 
-export const updateUserInfo = async (req, res) => {
+// controllers/userController.js
+const updateUserInfo = async (req, res) => {
   try {
     const { userId, name, email } = req.body;
     const user = await User.findById(userId);
@@ -145,30 +147,40 @@ export const updateUserInfo = async (req, res) => {
       });
     }
 
-    //  Upload image to Cloudinary (if a new file exists)
+    // 🧠 Check if email belongs to another user
+    if (email && email !== user.email) {
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({
+          success: false,
+          message: "This email is already in use by another account.",
+        });
+      }
+    }
+
+    // Upload new image if provided
     let updatedImage = user.image;
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "users", // images will go to a "users" folder in your Cloudinary
+        folder: "users",
       });
       updatedImage = result.secure_url;
     }
 
-   
-    const updatedInfo = {
-      name: name || user.name,
-      email: email || user.email,
-      image: updatedImage,
-    };
-
-    
-    const updatedUser = await User.findByIdAndUpdate(userId, updatedInfo, {
-      new: true,
-    });
+    // Update user info
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        name: name || user.name,
+        email: email || user.email,
+        image: updatedImage,
+      },
+      { new: true }
+    );
 
     return res.status(200).json({
       success: true,
-      message: "User has been updated successfully",
+      message: "User updated successfully",
       data: updatedUser,
     });
   } catch (err) {
@@ -179,6 +191,7 @@ export const updateUserInfo = async (req, res) => {
     });
   }
 };
+
 
 export {
   registerUser,
