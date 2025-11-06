@@ -146,6 +146,10 @@ const Navbar = () => {
             )}
           </button>
         </div>
+
+        <div className="flex justify-end  items-center">
+        <Link href="/admin">Admin</Link>
+      </div>
       </div>
 
       {/* mobile menu */}
