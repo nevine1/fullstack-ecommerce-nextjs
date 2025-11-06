@@ -147,7 +147,7 @@ const updateUserInfo = async (req, res) => {
       });
     }
 
-    // 🧠 Check if email belongs to another user
+    //  Check if email belongs to another user
     if (email && email !== user.email) {
       const existingUser = await User.findOne({ email });
       if (existingUser) {
