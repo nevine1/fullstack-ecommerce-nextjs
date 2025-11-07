@@ -16,7 +16,11 @@ const userSchema = new mongoose.Schema({
     }, 
     image: {
         type: String,
-    }
+    }, 
+    role: {
+        type: String,
+        default: "General",
+        }
 }, {
     timestamps: true
 })

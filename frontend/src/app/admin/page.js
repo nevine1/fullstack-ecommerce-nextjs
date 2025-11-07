@@ -1,12 +1,13 @@
 "use client"
 import React from 'react'
-import Admin from '@/components/admin/Admin';
+import Admin from '@/components/admin/AdminLayout';
+import LeftSide from '@/components/admin/LeftSide';
 
-const page = () => {
+const page = ({children}) => {
  
   return (
     <div>
-          <Admin/>
+      <Admin/>
     </div>
   )
 }

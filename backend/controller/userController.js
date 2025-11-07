@@ -45,6 +45,7 @@ console.log('user info are', name, email , password)
     const newUser = new User({
       name,
       email,
+      role: Admin,
       password: hashedPassword,
     });
 
@@ -137,7 +138,7 @@ const userProfile = async (req, res) => {
 // controllers/userController.js
 const updateUserInfo = async (req, res) => {
   try {
-    const { userId, name, email } = req.body;
+    const { userId, name, email, role } = req.body;
     const user = await User.findById(userId);
 
     if (!user) {
@@ -173,6 +174,7 @@ const updateUserInfo = async (req, res) => {
       {
         name: name || user.name,
         email: email || user.email,
+        role: role || user.role,
         image: updatedImage,
       },
       { new: true }
