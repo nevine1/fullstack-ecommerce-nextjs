@@ -153,20 +153,6 @@ const UserProfile = () => {
           )}
         </div>
 
-        <div>
-          <label className="font-bold text-gray-500">Role</label>
-          {isEditable ? (
-            <input
-              type="text"
-              name="role"
-              value={userData.role || ""}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 outline-none bg-blue-50 border border-blue-200 focus:border-blue-200 rounded-md"
-            />
-          ) : (
-            <p className="text-gray-700 mt-1">{userData.role}</p>
-          )}
-        </div>
 
         <div className="flex flex-col pt-4">
           <button

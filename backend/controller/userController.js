@@ -45,7 +45,6 @@ console.log('user info are', name, email , password)
     const newUser = new User({
       name,
       email,
-      role: Admin,
       password: hashedPassword,
     });
 
@@ -194,10 +193,26 @@ const updateUserInfo = async (req, res) => {
   }
 };
 
-
+//api to get all users 
+const getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    return res.status(200).json({
+      success: true,
+      data: users
+    })
+    
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    })
+  }
+}
 export {
   registerUser,
   login, 
   userProfile,
-  updateUserInfo
+  updateUserInfo,
+  getUsers
 };

@@ -1,13 +1,12 @@
 "use client"
 import React from 'react'
-import Admin from '@/components/admin/AdminLayout';
-import LeftSide from '@/components/admin/LeftSide';
 
-const page = ({children}) => {
+
+const page = () => {
  
   return (
-    <div>
-      <Admin/>
+    <div className="flex justify-center items-center bg-purple-200 text-8xl h-screen min-h-screen ">
+      <h1>Admin page</h1>
     </div>
   )
 }

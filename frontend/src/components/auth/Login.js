@@ -55,7 +55,6 @@ const Login = () => {
 
         if (res.data.success) {
               toast.success(`${name} registered successfully! Please log in.`);
-              //setMode("Login");
               router.push("/auth/login")
             } else {
               toast.error(res.data.message || "Registration failed");
