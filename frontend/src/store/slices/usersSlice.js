@@ -27,7 +27,7 @@ const usersSlice = createSlice({
         getUsers: (state, action) => {
             state.users = action.payload
         },
-        getAllUsers: (state, action) => { 
+        setAllUsers: (state, action) => { 
             state.users = action.payload;
             console.log('redux slice users are', state.users)
         },
@@ -42,5 +42,5 @@ const usersSlice = createSlice({
     }
 })
 
-export const {setIsLoading,getAllUsers,  getUsers , setToken ,setUserInfo,  updateUser,  userLogout } = usersSlice.actions; 
+export const {setIsLoading, setAllUsers,  getUsers , setToken ,setUserInfo,  updateUser,  userLogout } = usersSlice.actions; 
 export default usersSlice.reducer;

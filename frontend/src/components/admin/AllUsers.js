@@ -1,46 +1,27 @@
-"use client"
-import { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import axios from 'axios'
-import { getAllUsers, setIsLoading} from '../../store/slices/usersSlice'
+"use client";
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import User from './User';
+import { fetchAllUsers } from '@/store/async/usersAsync';
+
 const AllUsers = () => {
-    const dispatch = useDispatch();
-    const { users} = useSelector((state) => state.users)
-    
-    const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+  const dispatch = useDispatch();
+  const { users } = useSelector((state) => state.users);
 
-    const fetchAllUsers = async () => {
-      try {
-          dispatch(setIsLoading(true))
-            const res = await axios.get(`${backUrl}/api/users/get-users`);
-            console.log('users are,', res.data)
-        if (res.data.success) {
-          console.log('full res is', res.data.data)
-              dispatch(getAllUsers(res.data.data))
-                console.log('res is', res.data)
-            }
-        } catch (err) {
-            console.log(err)
-      } finally {
-        dispatch(setIsLoading(false))
-        }
-    }
-    
-    useEffect(() => {
-        fetchAllUsers();
-    }, [])
-  console.log('users are', users)
+  useEffect(() => {
+    fetchAllUsers(dispatch);
+  }, [dispatch]);
+
   return (
-    <div>
-      {
-        users?.map((user) => (
-          <div key={user._id}>
-            <h1>{user.name}</h1>
-          </div>
-        ))
-      }
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">All Users</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {users?.map((user) => (
+          <User key={user._id} user={user} />
+        ))}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default AllUsers
+export default AllUsers;

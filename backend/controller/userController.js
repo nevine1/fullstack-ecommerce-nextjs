@@ -196,19 +196,24 @@ const updateUserInfo = async (req, res) => {
 //api to get all users 
 const getUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find()
+      .select("-password -__v") // hide sensitive data
+      .sort({ createdAt: -1 }); // newest first
+
     return res.status(200).json({
       success: true,
-      data: users
-    })
-    
+      count: users.length,
+      data: users,
+    });
   } catch (err) {
+    console.error("Error fetching users:", err.message);
     return res.status(500).json({
       success: false,
-      message: err.message
-    })
+      message: err.message,
+    });
   }
-}
+};
+
 export {
   registerUser,
   login, 
