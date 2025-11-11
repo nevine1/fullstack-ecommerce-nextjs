@@ -1,8 +1,8 @@
 "use client";
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import User from './User';
-import { fetchAllUsers } from '@/store/async/usersAsync';
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import User from "./User";
+import { fetchAllUsers } from "@/store/async/usersAsync";
 
 const AllUsers = () => {
   const dispatch = useDispatch();
@@ -13,11 +13,28 @@ const AllUsers = () => {
   }, [dispatch]);
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">All Users</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {users?.map((user) => (
-          <User key={user._id} user={user} />
+    <div className="p-6 mx-auto">
+      <h1 className="text-xl font-bold mb-4">All Users</h1>
+
+     
+      <div className="
+        grid grid-cols-[0.5fr_1fr_1.5fr_1fr_0.5fr_1fr_0.5fr] items-center
+        bg-gray-200 text-gray-800 font-semibold py-3 px-4
+        rounded-t-md shadow-sm
+      ">
+        <p>#</p>
+        <p>Name</p>
+        <p>Email</p>
+        <p>Image</p>
+        <p>Role</p>
+        <p>Created At</p>
+        <p>Actions</p>
+      </div>
+
+      
+      <div className="divide-y">
+        {users?.map((user, index) => (
+          <User key={user._id} user={user} index={index} />
         ))}
       </div>
     </div>
