@@ -18,3 +18,11 @@ export const fetchAllUsers = async (dispatch) => {
         dispatch(setIsLoading(false))
         }
     }
+
+export const updateRole = async() => {
+  try {
+       const res = await axios.put(`${backUrl}/api/users/update-role`, ) 
+  } catch (err) {
+    
+      }
+    }

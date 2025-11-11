@@ -13,20 +13,22 @@ const AllUsers = () => {
   }, [dispatch]);
 
   return (
-    <div className="p-6 mx-auto">
-      <h1 className="text-xl font-bold mb-4">All Users</h1>
+    <div className="p-2 mx-auto">
+      <h1 className="text-xl text-center font-semibold mb-4">All Users</h1>
 
      
       <div className="
-        grid grid-cols-[0.5fr_1fr_1.5fr_1fr_0.5fr_1fr_0.5fr] items-center
+        grid grid-cols-[0.5fr_1fr_1fr_1fr_0.5fr_1fr_0.5fr] items-center
         bg-gray-200 text-gray-800 font-semibold py-3 px-4
-        rounded-t-md shadow-sm
+        rounded-t-md shadow-sm text-[15px]
       ">
         <p>#</p>
         <p>Name</p>
         <p>Email</p>
         <p>Image</p>
-        <p>Role</p>
+        <p >
+          Role
+        </p>
         <p>Created At</p>
         <p>Actions</p>
       </div>
