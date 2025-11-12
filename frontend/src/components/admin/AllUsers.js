@@ -26,9 +26,7 @@ const AllUsers = () => {
         <p>Name</p>
         <p>Email</p>
         <p>Image</p>
-        <p >
-          Role
-        </p>
+        <p >Role</p>
         <p>Created At</p>
         <p>Actions</p>
       </div>

@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
 import { v2 as cloudinary } from 'cloudinary'
-import { useSyncExternalStore } from 'react';
+
 
 const registerUser = async (req, res) => {
   try {

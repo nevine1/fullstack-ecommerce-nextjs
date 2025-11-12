@@ -1,7 +1,8 @@
 import { setIsLoading , setAllUsers, updateUser} from "../slices/usersSlice"
 import { useSelector } from "react-redux"
 import axios from "axios"
-import { createServerSearchParamsForServerPage } from "next/dist/server/request/search-params"
+
+
 const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 export const fetchAllUsers = async (dispatch) => {
       try {
@@ -20,18 +21,27 @@ export const fetchAllUsers = async (dispatch) => {
         }
     }
 
-export const updateRole = async({userId, dispatch }) => {
-  try {
-    dispatch(setIsLoading(true))
 
-    const res = await axios.put(`${backUrl}/api/users/update-role`, userId);
+export const updateRole = async ({ userId, newRole, setShowUpdateRole, dispatch }) => {
+  if (!newRole) return alert("Please select a role");
+  
+  try {
+    dispatch(setIsLoading(true));
+
+    const res = await axios.put(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/users/update-role`, {
+      userId,
+      role: newRole,
+    });
+
     if (res.data.success) {
-      dispatch(updateUser())
+      dispatch(updateUser(res.data.data));
+      alert("User role updated successfully");
+      setShowUpdateRole(false);
     }
-    
   } catch (err) {
-    console.log("error message is:", err.message)
+    console.error("Error updating role:", err.message);
+    alert("Failed to update user role");
   } finally {
-    dispatch(setIsLoading(false))
-      }
-    }
+    dispatch(setIsLoading(false));
+  }
+};

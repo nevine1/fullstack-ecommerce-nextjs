@@ -21,9 +21,11 @@ const usersSlice = createSlice({
             console.log('redux user details is:', action.payload)
         },
         updateUser: (state, action) => {
-            state.userInfo = action.payload;
-            console.log(' redux updated user info is', state.userInfo)
-        },
+            const updatedUser = action.payload;
+            state.users = state.users.map((user) =>
+                user._id === updatedUser._id ? updatedUser : user
+            );
+            },
         getUsers: (state, action) => {
             state.users = action.payload
         },
