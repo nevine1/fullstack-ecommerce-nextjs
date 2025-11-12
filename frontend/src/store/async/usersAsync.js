@@ -1,6 +1,7 @@
-import { setIsLoading , setAllUsers} from "../slices/usersSlice"
+import { setIsLoading , setAllUsers, updateUser} from "../slices/usersSlice"
 import { useSelector } from "react-redux"
 import axios from "axios"
+import { createServerSearchParamsForServerPage } from "next/dist/server/request/search-params"
 const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 export const fetchAllUsers = async (dispatch) => {
       try {
@@ -13,16 +14,24 @@ export const fetchAllUsers = async (dispatch) => {
                 console.log('res is', res.data)
             }
         } catch (err) {
-            console.log(err)
+            console.log(err.message)
       } finally {
         dispatch(setIsLoading(false))
         }
     }
 
-export const updateRole = async() => {
+export const updateRole = async({userId, dispatch }) => {
   try {
-       const res = await axios.put(`${backUrl}/api/users/update-role`, ) 
-  } catch (err) {
+    dispatch(setIsLoading(true))
+
+    const res = await axios.put(`${backUrl}/api/users/update-role`, userId);
+    if (res.data.success) {
+      dispatch(updateUser())
+    }
     
+  } catch (err) {
+    console.log("error message is:", err.message)
+  } finally {
+    dispatch(setIsLoading(false))
       }
     }

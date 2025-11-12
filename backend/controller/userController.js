@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import validator from 'validator';
 import { v2 as cloudinary } from 'cloudinary'
+import { useSyncExternalStore } from 'react';
 
 const registerUser = async (req, res) => {
   try {
@@ -215,36 +216,37 @@ const getUsers = async (req, res) => {
 };
 
 //api for changing user's role
-const changeUserRole = async(req, res) => {
-  try{
-    const userId = req.user._id;
+const changeUserRole = async (req, res) => {
+  try {
+    const {userId, role } = req.body;
     console.log('backend user id is', userId)
     const user = await User.findById(userId);
     if (!user) {
       return res.status(400).json({
-      success: false,
-      message: "This user is not found"
+        success: false,
+        message: "This user is not found"
       });
-      
-      const updatedUserRole = await User.findByIdAndUpdate(userId, 
-        { role: Admin }, 
-        { new: true}
-      )
     }
-    return res.status(200).json({
-      success: true,
-      message: "User role has been updated successfully",
-      data: updatedUserRole,
-    });
+      const newRole = user.role === "General" ? "Admin" : "General"
+      const updatedUserRole = await User.findByIdAndUpdate(userId,
+        { role: newRole },
+        { new: true }
+      )
     
-  }catch(err) {
-    console.error("Error fetching users:", err.message);
-    return res.status(500).json({
-      success: false,
-      message: err.message,
-    });
+      return res.status(200).json({
+        success: true,
+        message: "User role has been updated successfully",
+        data: updatedUserRole,
+      });
+    
+    }catch (err) {
+      console.error("Error fetching users:", err.message);
+      return res.status(500).json({
+        success: false,
+        message: err.message,
+      });
+    }
   }
-}
 
 
 export {
