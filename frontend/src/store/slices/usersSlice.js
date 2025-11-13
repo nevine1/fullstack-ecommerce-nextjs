@@ -25,6 +25,10 @@ const usersSlice = createSlice({
             state.users = state.users.map((user) =>
                 user._id === updatedUser._id ? updatedUser : user
             );
+
+            if (state.userInfo && state.userInfo._id === updatedUser._id) {
+                    state.userInfo = { ...state.userInfo, role: updatedUser.role };
+                }
             },
         getUsers: (state, action) => {
             state.users = action.payload

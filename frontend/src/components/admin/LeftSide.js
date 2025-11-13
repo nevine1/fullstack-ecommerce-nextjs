@@ -1,12 +1,15 @@
 "use client"
-import React from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import profileImg from '../../assets/profile.png';
 import Link from 'next/link'
-const LeftSide = ({ onSelect }) => {
+import { updateUser} from '../../store/slices/usersSlice'
+const LeftSide = ( ) => {
+  const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.users);
-
+  
+  
   return (
     <div className="flex flex-col items-center pt-6">
       {/* Profile Section */}

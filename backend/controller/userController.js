@@ -134,8 +134,8 @@ const userProfile = async (req, res) => {
       })
 }
 
+
 //api to update the user details 
-// controllers/userController.js
 const updateUserInfo = async (req, res) => {
   try {
     const { userId, name, email, role } = req.body;
@@ -193,7 +193,37 @@ const updateUserInfo = async (req, res) => {
     });
   }
 };
+//api for update user info by admin 
+const updateUserDetailsByAdmin = async (req, res) => {
+  try {
+    const { userId, name, email, role } = req.body;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "This user is not found"
+      })
+    }
 
+    const updatedInfo = {
+      name, email, role
+    }
+    const updatedUser = await User.findByIdAndUpdate(userId, updatedInfo, {
+      new: true
+    })
+    return res.status(200).json({
+      success: true,
+      message: "User has been updated successfully by admin", 
+      data: updatedUser
+    })
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false, 
+      message: err.message
+    })
+  }
+}
 //api to get all users 
 const getUsers = async (req, res) => {
   try {
@@ -254,5 +284,6 @@ export {
   login, 
   userProfile,
   updateUserInfo,
-  getUsers, changeUserRole
+  getUsers, changeUserRole,
+  updateUserDetailsByAdmin
 };

@@ -7,7 +7,7 @@ import { fetchAllUsers } from "@/store/async/usersAsync";
 const AllUsers = () => {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.users);
-
+console.log('user in all users page are', users)
   useEffect(() => {
     fetchAllUsers(dispatch);
   }, [dispatch]);
