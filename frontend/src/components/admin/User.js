@@ -8,10 +8,12 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setIsLoading, updateUser } from "../../store/slices/usersSlice";
 import UpdateRole from "./UpdateRole";
+import UpdateAllUserInfo from "./UpdateAllUserInfo";
 
 const User = ({ user, index }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const [showUpdateUserInfo , setShowUpdateUserInfo ] = useState(false)
   const [showUpdateRole, setShowUpdateRole] = useState(false);
 
   return (
@@ -51,7 +53,7 @@ const User = ({ user, index }) => {
       <div className="flex md:flex-row flex-col gap-2">
         <button
           className="text-green-600 cursor-pointer"
-          onClick={() => router.push(`/admin/all-users/${user._id}`)}
+          onClick={() => setShowUpdateUserInfo(true)}
         >
           <FaEdit size="20" />
         </button>
@@ -67,6 +69,12 @@ const User = ({ user, index }) => {
           currentRole={user.role}
         />
       )}
+
+      {
+        showUpdateUserInfo && (
+          <UpdateAllUserInfo userId={user._id} name={user.name} email={user.email} role={user.rol} />
+        )
+      }
     </div>
   );
 };
