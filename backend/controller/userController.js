@@ -148,7 +148,7 @@ const updateUserInfo = async (req, res) => {
       });
     }
 
-    //  Check if email belongs to another user
+    
     if (email && email !== user.email) {
       const existingUser = await User.findOne({ email });
       if (existingUser) {
@@ -197,33 +197,48 @@ const updateUserInfo = async (req, res) => {
 const updateUserDetailsByAdmin = async (req, res) => {
   try {
     const { userId, name, email, role } = req.body;
+
     const user = await User.findById(userId);
     if (!user) {
       return res.status(400).json({
         success: false,
-        message: "This user is not found"
-      })
+        message: "This user is not found",
+      });
     }
 
-    const updatedInfo = {
-      name, email, role
-    }
+    const updatedInfo = { name, email, role };
+
     const updatedUser = await User.findByIdAndUpdate(userId, updatedInfo, {
-      new: true
-    })
+      new: true,
+      runValidators: true,
+    });
+
     return res.status(200).json({
       success: true,
-      message: "User has been updated successfully by admin", 
-      data: updatedUser
-    })
+      message: "User has been updated successfully by admin",
+      data: updatedUser,
+    });
 
   } catch (err) {
+
+    // duplicate email error
+    if (err.code === 11000) {
+      console.log('update error is', err)
+      return res.status(400).json({
+        success: false,
+        message: "Email already exists for another user",
+      });
+    }
+
+    console.log("ADMIN UPDATE ERROR:", err); 
+
     return res.status(500).json({
-      success: false, 
-      message: err.message
-    })
+      success: false,
+      message: err.message,
+    });
   }
-}
+};
+
 //api to get all users 
 const getUsers = async (req, res) => {
   try {

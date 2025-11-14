@@ -72,7 +72,14 @@ const User = ({ user, index }) => {
 
       {
         showUpdateUserInfo && (
-          <UpdateAllUserInfo userId={user._id} name={user.name} email={user.email} role={user.rol} />
+          
+          <UpdateAllUserInfo
+            userId={user._id}
+            name={user.name}
+            email={user.email}
+            role={user.role}
+            setShowUpdateUserInfo={setShowUpdateUserInfo}
+          />
         )
       }
     </div>
