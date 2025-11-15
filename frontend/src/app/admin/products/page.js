@@ -1,9 +1,9 @@
 import React from 'react'
-
+import Products from '@/components/admin/products/Products'
 const page = () => {
   return (
     <div>
-      <h1>all products pageeeeeeeeeeeee</h1>
+      <Products/>
     </div>
   )
 }
