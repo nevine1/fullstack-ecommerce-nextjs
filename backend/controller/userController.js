@@ -215,7 +215,7 @@ const updateUserDetailsByAdmin = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "User has been updated successfully by admin",
+      message: `${updatedUser.name} has been updated successfully`,
       data: updatedUser,
     });
 
@@ -226,7 +226,7 @@ const updateUserDetailsByAdmin = async (req, res) => {
       console.log('update error is', err)
       return res.status(400).json({
         success: false,
-        message: "Email already exists for another user",
+        message: "This email address is already existing!",
       });
     }
 

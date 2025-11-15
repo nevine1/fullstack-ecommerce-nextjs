@@ -69,7 +69,13 @@ const Login = () => {
         console.log('login user is ', res.data.token)
         if (res.data.success) {
           dispatch(setToken(res.data.token))
-          router.push('/auth/profile');
+
+          if (res.data.data.role === "Admin") {
+            router.push('/admin/all-users')
+          } else {
+            router.push('/auth/profile');
+          }
+       
           toast.success("has been successfully logged in")
         }
       

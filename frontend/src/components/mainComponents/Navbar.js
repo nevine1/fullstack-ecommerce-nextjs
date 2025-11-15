@@ -103,19 +103,24 @@ const Navbar = () => {
                 height={35}
                 className="rounded-full cursor-pointer border border-gray-300"
               />
-              <div className="absolute right-0 top-12 hidden group-hover:flex flex-col bg-white border border-gray-200 rounded-lg shadow-lg w-40 z-50">
+              <div className="absolute right-0 top-10 hidden group-hover:flex flex-col bg-gray-200 border border-gray-200 rounded-lg shadow-lg w-40 z-50">
+                {
+                  userInfo?.role === "Admin" && (
+                    <Link
+                      href="/admin/all-users"
+                      className="px-4 py-1 text-gray-700 hover:bg-gray-100"
+                    >
+                      Admin Panel
+                    </Link>
+                  )
+                }
                 <Link
                   href="/auth/profile"
                   className="px-4 py-2 text-gray-700 hover:bg-gray-100"
                 >
                   Profile
                 </Link>
-                <Link
-                  href="/auth/account"
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-100"
-                >
-                  Account
-                </Link>
+                
                 <button
                   onClick={handleLogout}
                   className="px-4 py-2 text-left text-red-500 hover:bg-gray-100"
@@ -127,10 +132,9 @@ const Navbar = () => {
           ) : (
             <button
               onClick={() => router.push("/auth/login")}
-              className="flex items-center gap-1 px-4 py-1.5 border border-blue-500 text-blue-500 text-sm rounded-full hover:bg-blue-500 hover:text-white transition-all"
-            >
-              <FaRegUser size={16} />
-              <span>Login</span>
+              className="flex items-center gap-1 px-4 py-1.5 border border-orange-600 text-orange-600 text-sm rounded-full hover:bg-orange-600 hover:text-white transition-all"
+              >
+                Login
             </button>
           )}
 
@@ -148,7 +152,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex justify-end  items-center">
-        <Link href="/admin">Admin</Link>
+        
       </div>
       </div>
 

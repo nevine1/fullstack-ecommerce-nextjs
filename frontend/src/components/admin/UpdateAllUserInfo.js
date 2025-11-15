@@ -24,7 +24,7 @@ const UpdateAllUserInfo = ({ userId, name, email, role, setShowUpdateUserInfo })
   };
 
  
-  const adminUpdateUserInfo = async (e) => {
+  const handleAdminUpdateUserInfo = async (e) => {
     e.preventDefault();
 
     try {
@@ -39,6 +39,7 @@ const UpdateAllUserInfo = ({ userId, name, email, role, setShowUpdateUserInfo })
         dispatch(updateUser(res.data.data));
 
         setShowUpdateUserInfo(false);
+        console.log('updated user is', updatedUser)
         toast.success("This user has been successfully updated")
       }
 
@@ -63,19 +64,19 @@ const UpdateAllUserInfo = ({ userId, name, email, role, setShowUpdateUserInfo })
       </button>
 
       <form
-        onSubmit={adminUpdateUserInfo}
-        className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-5"
+        onSubmit={handleAdminUpdateUserInfo}
+        className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md "
       >
         <h2 className="text-xl font-semibold text-gray-700">Update User Info</h2>
 
         <div>
-          <label className="font-bold text-gray-600">Name</label>
+          <label className="font-bold text-gray-600 mt-4">Name</label>
           <input
             type="text"
             name="name"
             value={userData.name}
             onChange={handleChange}
-            className="w-full mt-1 p-2 bg-blue-50 border rounded-md"
+            className="w-full mt-1 p-2 bg-blue-50 border border-gray-300 rounded-md"
           />
         </div>
 
@@ -86,29 +87,31 @@ const UpdateAllUserInfo = ({ userId, name, email, role, setShowUpdateUserInfo })
             name="email"
             value={userData.email}
             onChange={handleChange}
-            className="w-full mt-1 p-2 bg-blue-50 border rounded-md"
+            className="w-full mt-1 p-2 bg-blue-50 border border-gray-300 rounded-md"
           />
         </div>
 
-        <div className="mb-4">
+        <div className="">
           <label className="font-bold text-gray-600">Role</label>
           <select
             name="role"
             value={userData.role}
             onChange={handleChange}
-            className="w-full p-2 border rounded-md bg-blue-50"
+            className="w-full p-2 border border-gray-300  rounded-md bg-blue-50"
           >
             <option value="General">General</option>
             <option value="Admin">Admin</option>
           </select>
         </div>
 
-        <button
+        <div className="my-6">
+          <button
           type="submit"
-          className="w-full py-2 bg-blue-500 text-white rounded-md mt-8"
+          className="w-full py-2 bg-orange-600 text-white rounded-md "
         >
           Save Changes
         </button>
+        </div>
       </form>
     </div>
   );
