@@ -79,6 +79,7 @@ const UpdateAllUserInfo = ({ userId, name, email, role, setShowUpdateUserInfo })
             className="w-full mt-1 p-2 bg-blue-50 border border-gray-300 rounded-md"
           />
         </div>
+        
 
         <div>
           <label className="font-bold text-gray-600">Email</label>
