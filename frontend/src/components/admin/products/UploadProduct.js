@@ -2,8 +2,12 @@ import { useState } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
 import { productCategory } from "@/helpers/general";
 import { IoMdCloudUpload } from "react-icons/io";
-
+import axios from "axios";
+import { useSelector, useDispatch } from 'react-redux'
 const UploadProduct = ({ setShowUploadProduct }) => {
+  const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.products)
+  const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const [imageFile, setImageFile ] = useState([])
   const [productData, setProductData] = useState({
     name: "",
@@ -25,7 +29,7 @@ const UploadProduct = ({ setShowUploadProduct }) => {
   const handleUploadImage = (e) => {
   const file = e.target.files[0];
     if (file) {
-      setFileImage(file);
+      setImageFile(file);
       setProductData((prev) => ({
         ...prev,
         image: URL.createObjectURL(file),
@@ -34,9 +38,29 @@ const UploadProduct = ({ setShowUploadProduct }) => {
   }
   
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("hello upload page");
+
+    try {
+      const formData = new FormData();
+      formData.append('name', productData.name);
+      formData.append('category', productData.category);
+      formData.append('brandName', productData.brandName);
+
+      formData.append('image', imageFile);
+      const res = await axios.post(`${backUrl}/api/products/upload-product`, formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      )
+
+      if (res.data.success) {
+        console.log(res.data.data)
+      }
+    } catch (err) {
+      console.log(err.message)
+    }
   };
 
   return (
@@ -58,7 +82,9 @@ const UploadProduct = ({ setShowUploadProduct }) => {
         </div>
 
        
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 overflow-y-scroll">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 overflow-y-scroll"
+          
+        >
 
           <input
             type="text"
@@ -131,21 +157,12 @@ const UploadProduct = ({ setShowUploadProduct }) => {
             required
           />
 
-         {/*  <input
+          <input
             type="number"
             name="sellingPrice"
             value={productData.sellingPrice}
             onChange={handleChange}
             placeholder="Selling Price"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md 
-                       focus:outline-none focus:ring-2 focus:ring-orange-300"
-            required
-          /> */}
-
-          <input
-            type="file"
-            name="image"
-            onChange={handleChange}
             className="w-full px-3 py-2 border border-gray-300 rounded-md 
                        focus:outline-none focus:ring-2 focus:ring-orange-300"
             required
@@ -155,6 +172,7 @@ const UploadProduct = ({ setShowUploadProduct }) => {
             type="submit"
             className="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white 
                        font-medium py-2 rounded-md transition-all shadow"
+            disabled={isLoading}
           >
             Submit
           </button>
