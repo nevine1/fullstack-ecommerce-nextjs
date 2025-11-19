@@ -4,15 +4,14 @@ import { productCategory } from "@/helpers/general";
 import { IoMdCloudUpload } from "react-icons/io";
 
 const UploadProduct = ({ setShowUploadProduct }) => {
-  const [fileImage, setFileImage ] = useState(null)
+  const [imageFile, setImageFile ] = useState([])
   const [productData, setProductData] = useState({
     name: "",
     category: "",
     description: "",
     price: "",
     sellingPrice: "",
-    brandName: "",
-    image: "",
+    brandName: ""
   });
 
   const handleChange = (e) => {
