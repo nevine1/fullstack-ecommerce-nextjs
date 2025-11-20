@@ -1,5 +1,6 @@
 import Product from "../models/productModel.js";
 import { v2 as cloudinary } from 'cloudinary'
+import { upload } from '../middleware/multer.js'
 const uploadProduct = async (req, res) => {
   try {
     const { name, category, brandName, description, price, sellingPrice } = req.body;
@@ -33,7 +34,7 @@ const uploadProduct = async (req, res) => {
     });
 
     await newProduct.save();
-
+console.log('backend added product is:', newProduct)
     return res.status(201).json({
       success: true,
       message: "Product uploaded successfully",

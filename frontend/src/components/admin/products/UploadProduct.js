@@ -2,13 +2,18 @@ import { useState } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
 import { productCategory } from "@/helpers/general";
 import { IoMdCloudUpload } from "react-icons/io";
+import Image from 'next/image'
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux'
+import { setProducts } from '../../../store/slices/productsSlice'
+import { useRouter } from "next/navigation";
 const UploadProduct = ({ setShowUploadProduct }) => {
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.products)
+  const router = useRouter();
+  const { isLoading, products } = useSelector((state) => state.products)
   const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
-  const [imageFile, setImageFile ] = useState([])
+  const [imageFile, setImageFile] = useState(null)
+  const [imagePreview, setImagePreview ] = useState(null)
   const [productData, setProductData] = useState({
     name: "",
     category: "",
@@ -26,28 +31,24 @@ const UploadProduct = ({ setShowUploadProduct }) => {
     }));
   };
 
+  //upload only one image
   const handleUploadImage = (e) => {
-  const file = e.target.files[0];
+    const file = e.target.files[0];
+
     if (file) {
       setImageFile(file);
-      setProductData((prev) => ({
-        ...prev,
-        image: URL.createObjectURL(file),
-      }));
+      setImagePreview(URL.createObjectURL(file));
     }
   }
-  
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("hello upload page");
-
     try {
       const formData = new FormData();
-      formData.append('name', productData.name);
-      formData.append('category', productData.category);
-      formData.append('brandName', productData.brandName);
 
+      Object.entries(productData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
       formData.append('image', imageFile);
       const res = await axios.post(`${backUrl}/api/products/upload-product`, formData,
         {
@@ -56,7 +57,10 @@ const UploadProduct = ({ setShowUploadProduct }) => {
       )
 
       if (res.data.success) {
-        console.log(res.data.data)
+        dispatch(setProducts([...products, res.data.data]))
+        console.log('res to upload the new product is', res.data.data)
+        setShowUploadProduct(false)
+        router.push('/admin/products')
       }
     } catch (err) {
       console.log(err.message)
@@ -65,10 +69,10 @@ const UploadProduct = ({ setShowUploadProduct }) => {
 
   return (
     <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-center">
-      {/* MODAL CONTAINER */}
+     
       <div className="relative bg-white w-full max-w-lg mx-4 rounded-xl shadow-xl p-6 overflow-y-auto max-h-[90vh] my-4">
 
-        {/* HEADER */}
+      
         <div className="flex justify-between items-center space-y-4">
           <h1 className="font-bold text-2xl text-orange-700">
             Upload Product
@@ -113,27 +117,35 @@ const UploadProduct = ({ setShowUploadProduct }) => {
           </select>
 
           <label htmlFor="uploadImage">
-          <div className="w-full px-3 py-2 border border-gray-300 rounded-md flex items-center justify-center
-                       focus:outline-none focus:ring-2 focus:ring-orange-300 text-slate-500">
-         
+            <div className="w-full px-3 py-2 border border-gray-300 rounded-md flex items-center justify-center
+                            focus:outline-none focus:ring-2 focus:ring-orange-300 text-slate-500">
+
               <div className="flex flex-col gap-2 items-center">
-                <IoMdCloudUpload size="20"/>
-                  <p>Upload product image</p>
-                  <input type="file" id="uploadImage" hidden
-                  onChange={handleUploadImage} />
+                <IoMdCloudUpload size="20" />
+                <p>Upload product image</p>
+                <input
+                  type="file"
+                  id="uploadImage"
+                  hidden
+                  accept="image/*"
+                  onChange={handleUploadImage}
+                />
               </div>
             </div>
-            </label>
-          <input
-            type="text"
-            name="description"
-            value={productData.description}
-            onChange={handleChange}
-            placeholder="Product Description"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md 
-                       focus:outline-none focus:ring-2 focus:ring-orange-300"
-            required
-          />
+          </label>
+
+          {/* image preview */}
+          {imagePreview && (
+            <div className="w-full flex justify-center mt-2">
+              <Image
+                src={imagePreview}
+                alt="Preview"
+                className="w-40 h-40 object-cover rounded-lg shadow-md border"
+                height={20}
+                width={20}
+              />
+            </div>
+          )}
 
           <input
             type="text"
@@ -167,7 +179,13 @@ const UploadProduct = ({ setShowUploadProduct }) => {
                        focus:outline-none focus:ring-2 focus:ring-orange-300"
             required
           />
-
+          <textarea
+            name="description"
+            onChange={handleChange}
+            placeholder="Description"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md 
+                       focus:outline-none focus:ring-2 focus:ring-orange-300"
+          ></textarea>
           <button
             type="submit"
             className="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white 
