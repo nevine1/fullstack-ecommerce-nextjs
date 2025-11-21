@@ -2,9 +2,11 @@
 import { useState } from 'react'
 import { IoMdAdd } from "react-icons/io";
 import UploadProduct from './UploadProduct';
-
+import AllProducts from './AllProducts'
+import { useSelector } from 'react-redux';
 const Products = () => {
-  const [showUploadProduct, setShowUploadProduct ] = useState(false)
+  const [showUploadProduct, setShowUploadProduct] = useState(false);
+  const { products } = useSelector((state) => state.products)
   return (
     <div>
           <div className='flex flex-row justify-between '>
@@ -16,6 +18,13 @@ const Products = () => {
 
                   Add New Product
               </button>
+      </div>
+      <div>
+        
+    
+          <AllProducts/>
+        
+      
       </div>
       {
         showUploadProduct && (

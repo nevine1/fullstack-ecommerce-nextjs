@@ -4,6 +4,6 @@ import { uploadProduct, getAllProducts } from '../controller/productController.j
 const productRoute = express.Router();
 
 productRoute.post('/upload-product', upload.single('image'), uploadProduct);
-productRoute.post('/get-products', getAllProducts);
+productRoute.get('/get-products', getAllProducts);
 
 export default productRoute; 

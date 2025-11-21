@@ -9,11 +9,14 @@ const productsSlice = createSlice({
         error: null,
     },
     reducers: {
+        setIsLoading: (state, action) => {
+            state.isLoading = action.payload;
+        }, 
         setProducts: (state, action) => {
             state.products = action.payload
         } 
     }
 })
 
-export const { setProducts } = productsSlice.actions;
+export const { setProducts, setIsLoading } = productsSlice.actions;
 export default productsSlice.reducer;
