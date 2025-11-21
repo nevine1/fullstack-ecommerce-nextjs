@@ -1,6 +1,7 @@
 import Product from "../models/productModel.js";
 import { v2 as cloudinary } from 'cloudinary'
 import { upload } from '../middleware/multer.js'
+import productRoute from "../routes/productRouter.js";
 const uploadProduct = async (req, res) => {
   try {
     const { name, category, brandName, description, price, sellingPrice } = req.body;
@@ -50,7 +51,23 @@ console.log('backend added product is:', newProduct)
   }
 };
 
+//api to get all products 
+const getAllProducts = async (req, res) => {
+  try {
+    const products = await Products.find();
 
+    return res.status(200).json({
+      success: true,
+      data: products
+    })
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    })
+  }
+}
 export {
-    uploadProduct
+  uploadProduct,
+  getAllProducts
 }

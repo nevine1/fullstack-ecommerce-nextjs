@@ -7,6 +7,7 @@ import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux'
 import { setProducts } from '../../../store/slices/productsSlice'
 import { useRouter } from "next/navigation";
+import { toast } from 'react-toastify'
 const UploadProduct = ({ setShowUploadProduct }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -59,7 +60,8 @@ const UploadProduct = ({ setShowUploadProduct }) => {
       if (res.data.success) {
         dispatch(setProducts([...products, res.data.data]))
         console.log('res to upload the new product is', res.data.data)
-        setShowUploadProduct(false)
+        setShowUploadProduct(false);
+        toast.success("New product has been successfully added to database!")
         router.push('/admin/products')
       }
     } catch (err) {
