@@ -13,8 +13,8 @@ const UploadProduct = ({ setShowUploadProduct }) => {
   const router = useRouter();
   const { isLoading, products } = useSelector((state) => state.products)
   const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
-  const [imageFile, setImageFile] = useState(null)
-  const [imagePreview, setImagePreview ] = useState(null)
+  const [imageFiles, setImageFiles] = useState([])
+  const [imagePreviews, setImagePreviews ] = useState([])
   const [productData, setProductData] = useState({
     name: "",
     category: "",
@@ -33,15 +33,32 @@ const UploadProduct = ({ setShowUploadProduct }) => {
   };
 
   //upload only one image
-  const handleUploadImage = (e) => {
+ /*  const handleUploadImage = (e) => {
     const file = e.target.files[0];
 
     if (file) {
       setImageFile(file);
       setImagePreview(URL.createObjectURL(file));
     }
-  }
+  } */
  
+  //upload multiple images up to 5 images
+  const handleUploadImages = (e) => {
+  const files = Array.from(e.target.files);
+
+  // Limit 5 images
+  if (files.length + imageFiles.length > 5) {
+    alert("You can only upload up to 5 images.");
+    return;
+  }
+
+  // Save file objects
+  setImageFiles((prev) => [...prev, ...files]);
+
+  // Create preview URLs
+  const previewURLs = files.map((file) => URL.createObjectURL(file));
+  setImagePreviews((prev) => [...prev, ...previewURLs]);
+};
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -50,13 +67,18 @@ const UploadProduct = ({ setShowUploadProduct }) => {
       Object.entries(productData).forEach(([key, value]) => {
       formData.append(key, value);
     });
-      formData.append('image', imageFile);
+      //formData.append('image', imageFile); this is for only one image
+      //upload multiple images
+       imageFiles.forEach((file) => {
+      formData.append("images", file); // backend receives req.files.images[]
+       }); 
+      
       const res = await axios.post(`${backUrl}/api/products/upload-product`, formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         }
       )
-
+console.log('data sent are:', formData)
       if (res.data.success) {
         dispatch(setProducts([...products, res.data.data]))
         console.log('res to upload the new product is', res.data.data)
@@ -88,9 +110,7 @@ const UploadProduct = ({ setShowUploadProduct }) => {
         </div>
 
        
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 overflow-y-scroll"
-          
-        >
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 overflow-y-scroll">
 
           <input
             type="text"
@@ -130,24 +150,30 @@ const UploadProduct = ({ setShowUploadProduct }) => {
                   id="uploadImage"
                   hidden
                   accept="image/*"
-                  onChange={handleUploadImage}
+                  multiple   // allow multiple images
+                  onChange={handleUploadImages}
                 />
               </div>
             </div>
           </label>
 
           {/* image preview */}
-          {imagePreview && (
-            <div className="w-full flex justify-center mt-2">
+          <div className="w-full flex flex-row gap-2 justify-center mt-2">
+            {imagePreviews.length > 0  && (
+            imagePreviews.map((img, index) => (
+              <div  key={index} > 
               <Image
-                src={imagePreview}
+                src={img}
                 alt="Preview"
-                className="w-40 h-40 object-cover rounded-lg shadow-md border"
-                height={20}
-                width={20}
+                className="w-10 h-10 object-cover rounded-lg shadow-md border"
+                height={10}
+                  width={10}
+                  key={index}
               />
             </div>
+           ))
           )}
+          </div>
 
           <input
             type="text"

@@ -19,12 +19,8 @@ const Products = () => {
                   Add New Product
               </button>
       </div>
-      <div>
-        
-    
+      <div className="mt-8">
           <AllProducts/>
-        
-      
       </div>
       {
         showUploadProduct && (

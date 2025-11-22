@@ -5,25 +5,25 @@ import { upload } from '../middleware/multer.js'
 const uploadProduct = async (req, res) => {
   try {
     const { name, category, brandName, description, price, sellingPrice } = req.body;
-    const imageFile = req.file;
-
+    //const imageFile = req.file; this is using when  upload only single image for eah product
+    //upload multiple images for each product
+    const imageFiles = req.files;
     if (!name || !category || !brandName || !description || !price || !sellingPrice) {
       return res.status(400).json({
         success: false,
         message: "All fields are required!",
       });
     }
-
-    let uploadedImage = "";
-
-    // Upload the image to Cloudinary
-    if (imageFile) {
-      const result = await cloudinary.uploader.upload(imageFile.path, {
-        folder: "products",
-      });
-      uploadedImage = result.secure_url;
+    // Upload multiple images
+    let uploadedImages = [];
+    if (imageFiles.length > 0) {
+      for (const img of imageFiles) {
+        const result = await cloudinary.uploader.upload(img.path, {
+          folder: "products",
+        });
+        uploadedImages.push(result.secure_url);
+      }
     }
-
     const newProduct = new Product({
       name,
       category,
@@ -31,11 +31,12 @@ const uploadProduct = async (req, res) => {
       description,
       price,
       sellingPrice,
-      image: uploadedImage,
+      images: uploadedImages, // Store array of URLs
     });
 
     await newProduct.save();
-console.log('backend added product is:', newProduct)
+    console.log("Product added:", newProduct);
+
     return res.status(201).json({
       success: true,
       message: "Product uploaded successfully",
@@ -50,6 +51,7 @@ console.log('backend added product is:', newProduct)
     });
   }
 };
+
 
 //api to get all products 
 const getAllProducts = async (req, res) => {

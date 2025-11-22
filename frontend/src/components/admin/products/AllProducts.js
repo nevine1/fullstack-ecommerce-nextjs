@@ -34,8 +34,7 @@ const AllProducts = () => {
     }, [])
 console.log('all products page ', products)
   return (
-    <div className="bg-blue-100  text-center shadow-md ">
-          <h1>Getting all Products</h1>
+    <div className="bg-blue-100  text-center shadow-md my-4">
           <div className="grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr] ">
               <p>#</p>
               <p>Name</p>
@@ -45,19 +44,20 @@ console.log('all products page ', products)
           </div>
           {
               products.length > 0 && (
-                  products.map((product, index) => (
+                  products.slice(0,2).map((product, index) => (
                       <div key={index} className=" p-2 grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr]">
                           <p>{index + 1} </p>
                           <p>{product.name}</p>
-                          <div>
+                          <div className="flex flex-row gap-2 justify-center ">
                               {
-                                  product.image.map((img, index) => (
+                                  product.images.map((img, index) => (
                                       <div key={index}>
                                           <Image
                                               src={img || prodImage}
                                               alt="image"
-                                              height={100}
-                                              width={100}
+                                              height={20}
+                                              width={20}
+                                              className="bg-transparent h-6 w-6"
                                           />
                                       </div>
                                   ))

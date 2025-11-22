@@ -3,7 +3,10 @@ import { upload } from '../middleware/multer.js';
 import { uploadProduct, getAllProducts } from '../controller/productController.js'
 const productRoute = express.Router();
 
-productRoute.post('/upload-product', upload.single('image'), uploadProduct);
+//productRoute.post('/upload-product', upload.single('image'), uploadProduct); this is using for upload only one iamge
+
+//upload multiple images(up to 5 images)
+productRoute.post('/upload-product', upload.array('images', 5), uploadProduct)
 productRoute.get('/get-products', getAllProducts);
 
 export default productRoute; 
