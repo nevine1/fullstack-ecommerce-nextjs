@@ -2,12 +2,15 @@ import { useState } from "react";
 import { IoMdCloseCircle } from "react-icons/io";
 import { productCategory } from "@/helpers/general";
 import { IoMdCloudUpload } from "react-icons/io";
+import { MdDelete } from 'react-icons/md'
 import Image from 'next/image'
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux'
 import { setProducts } from '../../../store/slices/productsSlice'
 import { useRouter } from "next/navigation";
 import { toast } from 'react-toastify'
+import Link from 'next/link'
+
 const UploadProduct = ({ setShowUploadProduct }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -58,7 +61,11 @@ const UploadProduct = ({ setShowUploadProduct }) => {
   // Create preview URLs
   const previewURLs = files.map((file) => URL.createObjectURL(file));
   setImagePreviews((prev) => [...prev, ...previewURLs]);
-};
+  };
+  
+  
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -108,10 +115,8 @@ console.log('data sent are:', formData)
             onClick={() => setShowUploadProduct(false)}
           />
         </div>
-
        
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 overflow-y-scroll">
-
           <input
             type="text"
             name="name"
@@ -138,41 +143,53 @@ console.log('data sent are:', formData)
             }
           </select>
 
-          <label htmlFor="uploadImage">
+          <div className="flex flex-col gap-2 ">
+            <label htmlFor="uploadImage">
             <div className="w-full px-3 py-2 border border-gray-300 rounded-md flex items-center justify-center
                             focus:outline-none focus:ring-2 focus:ring-orange-300 text-slate-500">
 
               <div className="flex flex-col gap-2 items-center">
-                <IoMdCloudUpload size="20" />
-                <p>Upload product image</p>
-                <input
-                  type="file"
-                  id="uploadImage"
-                  hidden
-                  accept="image/*"
-                  multiple   // allow multiple images
-                  onChange={handleUploadImages}
-                />
+                  <IoMdCloudUpload size="20" />
+                  <p>Upload product image</p>
+                  <input
+                    type="file"
+                    id="uploadImage"
+                    hidden
+                    accept="image/*"
+                    multiple   // allow multiple images
+                    onChange={handleUploadImages}
+                  />
               </div>
             </div>
           </label>
 
           {/* image preview */}
-          <div className="w-full flex flex-row gap-2 justify-center mt-2">
-            {imagePreviews.length > 0  && (
-            imagePreviews.map((img, index) => (
-              <div  key={index} > 
-              <Image
-                src={img}
-                alt="Preview"
-                className="w-10 h-10 object-cover rounded-lg shadow-md border"
-                height={10}
-                  width={10}
-                  key={index}
-              />
-            </div>
-           ))
-          )}
+            {
+              imagePreviews.length > 0 && (
+                <div className="w-full flex flex-row gap-2 p-2 justify-center border border-gray-300 rounded-md">
+                  {
+                    imagePreviews.length > 0 && (
+                      imagePreviews.map((img, index) => (
+                    <div  key={index} className="group relative" > 
+                      <Link href={img} className="cursor-pointer" target="_blank">
+                        <Image
+                          src={img}
+                          alt="Preview"
+                          className="w-18 h-18 object-cover rounded-lg shadow-md border border-gray-300 bg-white p-3"
+                          height={20}
+                            width={20}
+                            key={index}
+                          />
+                      </Link>
+                          <MdDelete
+                            onClick={() => handleDeleteImage(index)}
+                            className="absolute hidden group-hover:flex bottom-1 right-1 text-white p-1 rounded-full bg-red-500 transition-all duration-300 text-[22px]" />
+                    </div>
+                  ))
+                  )}
+                </div>
+              )
+              }
           </div>
 
           <input
