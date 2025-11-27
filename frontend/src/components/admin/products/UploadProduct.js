@@ -58,13 +58,22 @@ const UploadProduct = ({ setShowUploadProduct }) => {
   // Save file objects
   setImageFiles((prev) => [...prev, ...files]);
 
-  // Create preview URLs
+  // Create preview URLsc
   const previewURLs = files.map((file) => URL.createObjectURL(file));
   setImagePreviews((prev) => [...prev, ...previewURLs]);
   };
   
   
-  
+  const handleDeleteImage = (index) => {
+  // remove preview URL
+  const newPreviews = imagePreviews.filter((_, i) => i !== index);
+  setImagePreviews(newPreviews);
+
+  // remove image file too
+  const newImages = imageFiles.filter((_, i) => i !== index);
+  setImageFiles(newImages);
+};
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -225,7 +234,8 @@ console.log('data sent are:', formData)
             required
           />
           <textarea
-            name="description"
+            name="description"f
+            rows="4"
             onChange={handleChange}
             placeholder="Description"
             className="w-full px-3 py-2 border border-gray-300 rounded-md 

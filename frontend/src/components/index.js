@@ -6,5 +6,6 @@ import { IoMdCloudUpload } from "react-icons/io";
 import Image from 'next/image'
 import axios from "axios";
 import { setProducts } from '../store/slices/productsSlice'
+import { FaRegEdit } from "react-icons/fa";
 
 

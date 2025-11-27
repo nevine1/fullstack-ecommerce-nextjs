@@ -6,8 +6,11 @@ import { toast } from 'react-toastify'
 import { setIsLoading, setProducts } from '@/store/slices/productsSlice';
 import Image from 'next/image';
 import prodImage from '../../../assets/sampleImage.jpg'
+import { FaRegEdit } from "react-icons/fa";
+import { useRouter} from 'next/navigation'
 const AllProducts = () => {
     const dispatch = useDispatch();
+    const router = useRouter();
     const { products, isLoading } = useSelector((state) => state.products)
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
@@ -32,10 +35,14 @@ const AllProducts = () => {
     useEffect(() => {
         fetchAllProducts();
     }, [])
+
+    const adminEditProduct = () => {
+        console.log('productid ids')
+    }
 console.log('all products page ', products)
   return (
-    <div className="bg-blue-100  text-center shadow-md my-4">
-          <div className="grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr] ">
+    <div className="  text-center  my-4 bg-blue-100 p-4">
+          {/* <div className="grid grid-cols-[0.5fr_1fr_1fr_1fr_1fr] ">
               <p>#</p>
               <p>Name</p>
               <p>Image</p>
@@ -69,7 +76,37 @@ console.log('all products page ', products)
                       </div>
                   ))
                 )
-          }
+          } */}
+          <h1>All Products</h1>
+          <div className="grid  md:grid-cols-4 sm:grid-cols-2 my-5 gap-4">
+              {
+                  products.length > 0 ? (
+                      products.map((product, index) => (
+                          <div key={index}
+                              className="flex flex-col items-center gap-2 bg-gray-200 border border-gray-300 shadow rounded-md p-4">
+                              <Image
+                                  src={product?.images[0] || prodImage }
+                                  alt={`${product.name} image`}
+                                  width={100}
+                                  height={100}
+                                  className="bg-white w-20 h-20 p-4 "
+                              />
+                              <div className="flex justify-evenly">
+                                  <p>{product.name}</p>
+                                  
+                                  <button className="text-green-500 text-[22px]">
+                                      <FaRegEdit
+                                        onClick={() => router.push(`/admin/productDetails/${product._id}`)}
+                                      />
+                                  </button>
+                              </div>
+                          </div>
+                    ))
+                  ): (
+                      <p>There are no products</p>
+                  )
+              }
+          </div>
     </div>
   )
 }
