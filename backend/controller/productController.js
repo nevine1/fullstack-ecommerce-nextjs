@@ -69,7 +69,71 @@ console.log('backend products are', products)
     })
   }
 }
+
+//api to update product details
+const updateProduct = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, brandName, category, description, price, sellingPrice } = req.body;
+
+   
+    const product = await Product.findById(id);
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "This product is not found",
+      });
+    }
+
+    // uploaded new images 
+    const fileImages = req.files;   
+    const newUploadedImages = [];
+   
+    if (fileImages && fileImages.length > 0) {
+      for (const file of fileImages) {
+        const uploadedImg = await cloudinary.uploader.upload(file.path, {
+          folder: "products",
+        });
+
+        newUploadedImages.push(uploadedImg.secure_url);
+      }
+    }
+
+    // combine old + new images
+    const finalImages =
+      newUploadedImages.length > 0
+        ? [...product.images, ...newUploadedImages]
+        : product.images;
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      {
+        name,
+        brandName,
+        description,
+        price,
+        category,
+        sellingPrice,
+        images: finalImages,
+      },
+      { new: true }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      data: updatedProduct,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 export {
   uploadProduct,
-  getAllProducts
+  getAllProducts,
+  updateProduct
 }
