@@ -91,12 +91,12 @@ console.log('all products page ', products)
                                   height={100}
                                   className="bg-white w-20 h-20 p-4 "
                               />
-                              <div className="flex justify-evenly">
+                              <div className="flex justify-evenly gap-3">
                                   <p>{product.name}</p>
                                   
-                                  <button className="text-green-500 text-[22px]">
+                                  <button className="text-green-500 text-[22px] cursor-pointer">
                                       <FaRegEdit
-                                        onClick={() => router.push(`/admin/productDetails/${product._id}`)}
+                                        onClick={() => router.push(`/admin/products/${product._id}`)}
                                       />
                                   </button>
                               </div>

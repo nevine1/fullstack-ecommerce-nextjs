@@ -57,7 +57,7 @@ const uploadProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find();
-console.log('backend products are', products)
+
     return res.status(200).json({
       success: true,
       data: products
@@ -69,6 +69,33 @@ console.log('backend products are', products)
     })
   }
 }
+
+//api to get product details 
+const getProductData = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "This product is not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: product,
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 
 //api to update product details
 const updateProduct = async (req, res) => {
@@ -135,5 +162,6 @@ const updateProduct = async (req, res) => {
 export {
   uploadProduct,
   getAllProducts,
-  updateProduct
+  updateProduct, 
+  getProductData
 }
