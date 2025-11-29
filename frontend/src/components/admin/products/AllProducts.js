@@ -13,7 +13,6 @@ const AllProducts = () => {
     const router = useRouter();
     const { products, isLoading } = useSelector((state) => state.products)
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
-
     const fetchAllProducts = async () => {
         try {
             dispatch(setIsLoading(true))

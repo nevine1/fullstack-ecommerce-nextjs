@@ -102,8 +102,6 @@ const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, brandName, category, description, price, sellingPrice } = req.body;
-
-   
     const product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({
@@ -111,7 +109,6 @@ const updateProduct = async (req, res) => {
         message: "This product is not found",
       });
     }
-
     // uploaded new images 
     const fileImages = req.files;   
     const newUploadedImages = [];
@@ -125,7 +122,6 @@ const updateProduct = async (req, res) => {
         newUploadedImages.push(uploadedImg.secure_url);
       }
     }
-
     // combine old + new images
     const finalImages =
       newUploadedImages.length > 0
