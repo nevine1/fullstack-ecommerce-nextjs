@@ -1,12 +1,12 @@
 "use client"
 import React from 'react'
-import UpdateProduct from '../../../../components/admin/products/UpdateProduct'
+import EditProduct from '../../../../components/admin/products/EditProduct'
 const page = () => {
 
 
   return (
     <div>
-      <UpdateProduct/>
+      <EditProduct/>
     </div>
   )
 }

@@ -7,12 +7,15 @@ import { setIsLoading, setProducts } from '@/store/slices/productsSlice';
 import Image from 'next/image';
 import prodImage from '../../../assets/sampleImage.jpg'
 import { FaRegEdit } from "react-icons/fa";
-import { useRouter} from 'next/navigation'
+import { useRouter } from 'next/navigation'
+import EditProduct from './EditProduct'
+import Link from 'next/link'
 const AllProducts = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const { products, isLoading } = useSelector((state) => state.products)
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
+    const [showEditProduct, setShowEditProduct] = useState(false)
     const fetchAllProducts = async () => {
         try {
             dispatch(setIsLoading(true))
@@ -93,11 +96,17 @@ console.log('all products page ', products)
                               <div className="flex justify-evenly gap-3">
                                   <p>{product.name}</p>
                                   
-                                  <button className="text-green-500 text-[22px] cursor-pointer">
+                                 <Link href={`/admin/products/${product._id}`}>
+                                    <FaRegEdit/>
+                                  </Link> 
+                                  
+                                {/*   <button className="text-green-500 text-[22px] cursor-pointer">
                                       <FaRegEdit
-                                        onClick={() => router.push(`/admin/products/${product._id}`)}
+                                          onClick={() =>
+                                              router.push(`/admin/products/${product._id}`   
+                                              )}
                                       />
-                                  </button>
+                                  </button> */}
                               </div>
                           </div>
                     ))
