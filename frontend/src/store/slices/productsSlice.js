@@ -16,7 +16,7 @@ const productsSlice = createSlice({
             state.products = action.payload
         }, 
         setUpdatedProduct: (state, action) => {
-            state.product = action.payload;
+            state.productInfo = action.payload;
         }
     }
 })
