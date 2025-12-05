@@ -1,20 +1,17 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import LeftSide from "@/components/admin/LeftSide";
 
-
-const layout = ({children}) => {
-  
-
+const layout = ({ children }) => {
   return (
-    <div className="flex min-h-screen h-screen">
-      {/* Sidebar */}
-      <div className="w-1/5 border-r border-gray-200 bg-gray-100 custom-shadow">
+    <div className="flex h-screen overflow-hidden"> 
+      {/* sidebar - no scroll down*/}
+      <div className="w-1/5 border-r border-gray-200 bg-gray-100 custom-shadow h-full overflow-hidden">
         <LeftSide />
       </div>
 
-      {/* Main content  */}
-      <div className="flex-1 p-6 bg-gray-50">
+      {/* main content - scroll down */}
+      <div className="flex-1 p-6 bg-gray-50 h-full overflow-y-auto">
         {children}
       </div>
     </div>

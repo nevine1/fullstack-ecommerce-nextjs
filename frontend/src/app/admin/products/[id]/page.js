@@ -5,7 +5,7 @@ const page = () => {
 
 
   return (
-    <div>
+    <div className="h-calc(100vh-50px) overflow-y-scroll">
       <EditProduct/>
     </div>
   )

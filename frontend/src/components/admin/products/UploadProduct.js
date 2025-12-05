@@ -234,7 +234,7 @@ console.log('data sent are:', formData)
             required
           />
           <textarea
-            name="description"f
+            name="description"
             rows="4"
             onChange={handleChange}
             placeholder="Description"

@@ -19,7 +19,7 @@ const Products = () => {
                   Add New Product
               </button>
       </div>
-      <div className="mt-8">
+      <div className="mt-8 bg-slate-100">
           <AllProducts/>
       </div>
       {

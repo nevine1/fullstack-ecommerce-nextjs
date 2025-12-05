@@ -22,7 +22,6 @@ const EditProduct = () => {
   const [productData, setProductData] = useState(null);
   const [imageFiles, setImageFiles] = useState([]); // new images file objects
   const [imagePreviews, setImagePreviews] = useState([]); // new image preview URLs
-
   const [oldImages, setOldImages] = useState([]); // images already saved in DB
 
   const fetchProduct = async () => {
@@ -92,11 +91,8 @@ const EditProduct = () => {
 };
 
 
- console.log('images are', productData?.images)
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
-
     try {
       dispatch(setIsLoading(true))
       const formData = new FormData();
@@ -134,7 +130,7 @@ const EditProduct = () => {
       <div className="relative bg-white w-full max-w-lg mx-4 rounded-xl shadow-xl p-6 overflow-y-auto max-h-[90vh] my-4">
    
         <div className="flex justify-between items-center">
-          <h1 className="font-bold text-2xl text-orange-700">Eit data</h1>
+          <h1 className="font-bold text-xl text-orange-700 pm-4">Update {productData?.name} information</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
