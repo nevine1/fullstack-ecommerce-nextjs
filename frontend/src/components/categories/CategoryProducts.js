@@ -2,13 +2,17 @@ import { useEffect, useState } from 'react'
 import { useParams} from 'next/navigation'
 import axios from 'axios'
 const CategoryProducts = () => {
+
   const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
    const {cat} = useParams();
-      const [catProducts, setCatProducts ] = useState([])
-      const fetchCatProducts = async ()=>{
+  const [catProducts, setCatProducts] = useState([])
+  
+      const fetchCatProducts = async () => {
           try {
             const res = await axios.get(`${backUrl}/api/products/get-category-products/${cat}`);
+            console.log('res is the', res.data)
             if (res.data.success) {
+              
               setCatProducts(res.data.data); 
             }
           } catch (err) {

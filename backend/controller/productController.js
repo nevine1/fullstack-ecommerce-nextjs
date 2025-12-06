@@ -159,13 +159,17 @@ const updateProduct = async (req, res) => {
 // api to get the products for each category
 const getCategoryProducts = async (req, res) => {
   try {
-    const {cat} = req.params; 
+    const { cat } = req.params; 
+    console.log('category is', cat)
     const products = await Product.find({category: cat})
+    console.log('products are', products)
     return res.status(200).json(({
       success: true,
       data: products
     }))
+
   } catch (err) {
+
     console.log('getting category products error is', err.message)
     return res.status(500).json({
       success: false,
