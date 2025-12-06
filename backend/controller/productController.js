@@ -156,9 +156,28 @@ const updateProduct = async (req, res) => {
   }
 };
 
+// api to get the products for each category
+const getCategoryProducts = async (req, res) => {
+  try {
+    const {cat} = req.params; 
+    const products = await Product.find({category: cat})
+    return res.status(200).json(({
+      success: true,
+      data: products
+    }))
+  } catch (err) {
+    console.log('getting category products error is', err.message)
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+}
+
 export {
   uploadProduct,
   getAllProducts,
   updateProduct, 
-  getProductData
+  getProductData,
+  getCategoryProducts
 }
