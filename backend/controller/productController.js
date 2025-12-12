@@ -182,10 +182,29 @@ const getCategoryProducts = async (req, res) => {
   }
 }
 
+const getProductsPerCategory = async (req, res) =>{
+  try{
+    const catName = req.params;
+    const products = await Product.find({category: catName.catName})
+    return res.status(200).json({
+      success: true,
+      data: products
+    })
+    console.log(catName)
+  }catch (err) {
+
+    console.log('getting  products per category error is', err.message)
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+}
 export {
   uploadProduct,
   getAllProducts,
   updateProduct, 
   getProductData,
-  getCategoryProducts
+  getCategoryProducts, 
+  getProductsPerCategory
 }

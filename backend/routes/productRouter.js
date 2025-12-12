@@ -3,7 +3,8 @@ import { upload } from '../middleware/multer.js';
 import {
     uploadProduct, getAllProducts,
     getProductData, updateProduct,
-    getCategoryProducts
+    getCategoryProducts,
+    getProductsPerCategory
     } from '../controller/productController.js'
 const productRoute = express.Router();
 
@@ -15,5 +16,6 @@ productRoute.get('/get-product/:id', getProductData)
 productRoute.put('/update-product/:id', upload.array('images', 5), updateProduct)
 productRoute.get('/get-products', getAllProducts);
 productRoute.get('/get-category-products', getCategoryProducts);
+productRoute.get('/get-products-for-category/:catName', getProductsPerCategory);
 
 export default productRoute; 
