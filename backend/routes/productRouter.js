@@ -14,6 +14,6 @@ productRoute.post('/upload-product', upload.array('images', 5), uploadProduct)
 productRoute.get('/get-product/:id', getProductData)
 productRoute.put('/update-product/:id', upload.array('images', 5), updateProduct)
 productRoute.get('/get-products', getAllProducts);
-productRoute.get('/get-category-products/:cat', getCategoryProducts);
+productRoute.get('/get-category-products', getCategoryProducts);
 
 export default productRoute; 

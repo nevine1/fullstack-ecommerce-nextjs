@@ -156,18 +156,22 @@ const updateProduct = async (req, res) => {
   }
 };
 
-// api to get the products for each category
+
 const getCategoryProducts = async (req, res) => {
   try {
-    const { cat } = req.params; 
-    console.log('category is', cat)
-    const products = await Product.find({category: cat})
-    console.log('products are', products)
-    return res.status(200).json(({
-      success: true,
-      data: products
-    }))
+    
 
+      const category = await Product.find().distinct("category"); 
+      const productsByCategory = [];
+      for (const cat of category){
+        const allProducts = await Product.find({category: cat})
+        productsByCategory.push({category: cat, products: allProducts})
+      }
+
+    return res.status(200).json({
+      success: true,
+      data: productsByCategory
+    })
   } catch (err) {
 
     console.log('getting category products error is', err.message)
