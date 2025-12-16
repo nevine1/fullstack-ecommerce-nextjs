@@ -33,23 +33,23 @@ const CategoryProducts = () => {
 
   
 return ( 
-       <div className="scrollbar-none flex  items-center justify-center md:overflow-hidden sm:overflow-x-scroll gap-8 m-4">
+       <div className="scrollbar-none flex  items-center justify-center sm:overflow-hidden  gap-8 m-4 p-6 bg-white">
           {
             catProducts.length > 0 ? catProducts.map((category, index) => (
               <div key={index}>
                 {
                   category.products.slice(0, 1).map((product, index) =>(
                     <Link href={`/categories/${product.category}`} key={index} className="flex items-center flex-col cursor-pointer gap-2">
-                      <div  className="md:h-24 md:w-24 sm:h-16 sm:w-16  ">
+                      <div  className="md:h-16 md:w-16 sm:h-16 sm:w-16  ">
                         <Image
                           src={product?.images[2]}
                           alt={product.name}
                           height={100}
                           width={100}
-                          className="h-full w-full object-cover bg-white p-4 rounded-full"
+                          className="h-full w-full transition-all duration-300 hover:scale-105 object-fill bg-gray-200 p-2 mix-blend-multiply rounded-full"
                         />
                       </div>
-                      <p className="text-[12px] capitalize">{product?.name}</p>
+                      <p className="text-[12px] capitalize">{product?.name.slice(0, 6)}</p>
                     </Link>
                     
                   ))

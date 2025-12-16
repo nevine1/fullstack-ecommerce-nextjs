@@ -108,7 +108,7 @@ const Navbar = () => {
                   userInfo?.role === "Admin" && (
                     <Link
                       href="/admin/all-users"
-                      className="px-4 py-1 text-gray-700 hover:bg-gray-100"
+                      className="px-4 py-0 text-gray-700 hover:bg-gray-100"
                     >
                       Admin Panel
                     </Link>
@@ -116,7 +116,7 @@ const Navbar = () => {
                 }
                 <Link
                   href="/auth/profile"
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  className="px-4 py-1 text-gray-700 hover:bg-gray-100"
                 >
                   Profile
                 </Link>

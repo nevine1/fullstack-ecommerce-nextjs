@@ -1,6 +1,6 @@
 "use client"
 import { useParams } from "next/navigation"
-const Categories = () => {
+const Category = () => {
   const category = useParams();
     return (
       
@@ -11,4 +11,4 @@ const Categories = () => {
   )
 }
 
-export default Categories
+export default Category
