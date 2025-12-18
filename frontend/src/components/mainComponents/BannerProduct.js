@@ -27,7 +27,7 @@ const BannerProduct = () => {
 
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // 🔁 Auto slide
+  //  slide
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) =>
