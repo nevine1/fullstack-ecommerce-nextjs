@@ -5,7 +5,7 @@ import axios from 'axios'
 import profileImage from '../../assets/profile.png'
 import Image from 'next/image'
 import Link from 'next/link'
-const CategoryProducts = () => {
+const CategoryProducts = ({ onSelectedCategory }) => {
 
   const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
@@ -39,7 +39,9 @@ const CategoryProducts = () => {
           <div key={index}>
             {
               category.products.slice(0, 1).map((product, index) => (
-                <Link href={`/categories/${product.category}`} key={index} className="flex items-center flex-col cursor-pointer gap-2">
+                <div key={index}
+                  onClick={() => onSelectedCategory(category.category)}
+                  className="flex items-center flex-col cursor-pointer gap-2">
                   <div className="md:h-16 md:w-16 sm:h-16 sm:w-16">
                     <Image
                       src={product?.images[2]}
@@ -50,7 +52,7 @@ const CategoryProducts = () => {
                     />
                   </div>
                   <p className="text-[12px] capitalize">{product?.name.slice(0, 6)}</p>
-                </Link>
+                </div>
 
               ))
             }
