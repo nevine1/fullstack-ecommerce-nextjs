@@ -42,6 +42,7 @@ const CategoryProducts = ({ onSelectedCategory }) => {
                 <div key={index}
                   onClick={() => onSelectedCategory(category.category)}
                   className="flex items-center flex-col cursor-pointer gap-2">
+
                   <div className="md:h-16 md:w-16 sm:h-16 sm:w-16">
                     <Image
                       src={product?.images[2]}

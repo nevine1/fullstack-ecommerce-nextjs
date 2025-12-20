@@ -5,7 +5,7 @@ import {
     getProductData, updateProduct,
     getCategoryProducts,
     getProductsPerCategory
-    } from '../controller/productController.js'
+} from '../controller/productController.js'
 const productRoute = express.Router();
 
 //productRoute.post('/upload-product', upload.single('image'), uploadProduct); this is using for upload only one iamge
