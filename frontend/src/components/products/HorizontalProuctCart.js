@@ -26,7 +26,7 @@ const HorizontalProuctCart = ({ category }) => {
             dispatch(setIsLoading(false))
         }
     }
-    console.log('category products are', categoryProducts.category)
+    console.log('category products are', categoryProducts)
 
     useEffect(() => {
         if (category) {
@@ -34,23 +34,28 @@ const HorizontalProuctCart = ({ category }) => {
         }
     }, [category])
 
-    const result = categoryProducts.find((cat) => cat.category === category)
-
+    console.log('products in category', categoryProducts)
     return (
         <div className="container mx-auto px-4 my-6 ">
             <div className="flex h-39 w-full bg-white shadow-md rounded-md border border-gray-500">
 
                 <div className="bg-slate-200 h-full flex gap-2 overflow-x-auto p-2">
                     {
-                        result?.products?.length > 0 ? (
-                            result.products.map((product, index) => (
+                        categoryProducts?.length > 0 ? (
+                            categoryProducts.map((cat, index) => (
                                 <div key={index} className="relative w-[120px] h-[120px] flex-shrink-0">
-                                    <Image
-                                        src={product?.images[1]}
-                                        alt="product image"
-                                        fill
-                                        className="object-cover rounded-md"
-                                    />
+                                    {
+                                        cat.products.map((product, i) => (
+                                            <div key={i} className="w-full h-full flex">
+                                                <Image
+                                                    src={product?.images[1]}
+                                                    alt="product image"
+                                                    fill
+                                                    className="object-cover rounded-md"
+                                                />
+                                            </div>
+                                        ))
+                                    }
                                 </div>
                             ))
                         ) : (

@@ -1,9 +1,9 @@
-import  Category from  "@/components/categories/Category"
+import Category from "@/components/categories/Category"
 
-const page = () =>{
-    return(
+const page = () => {
+    return (
         <div>
-            <Category/>
+            <h1>Hello categoryies page</h1>
         </div>
     )
 }

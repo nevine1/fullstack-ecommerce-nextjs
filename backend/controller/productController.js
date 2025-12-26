@@ -111,9 +111,9 @@ const updateProduct = async (req, res) => {
       });
     }
     // uploaded new images 
-    const fileImages = req.files;   
+    const fileImages = req.files;
     const newUploadedImages = [];
-   
+
     if (fileImages && fileImages.length > 0) {
       for (const file of fileImages) {
         const uploadedImg = await cloudinary.uploader.upload(file.path, {
@@ -159,15 +159,15 @@ const updateProduct = async (req, res) => {
 
 const getCategoryProducts = async (req, res) => {
   try {
-    
 
-      const category = await Product.find().distinct("category"); 
-      const productsByCategory = [];
-      for (const cat of category){
-        const allProducts = await Product.find({category: cat})
-        productsByCategory.push({category: cat, products: allProducts})
-      }
 
+    const category = await Product.find().distinct("category");
+    const productsByCategory = [];
+    for (const cat of category) {
+      const allProducts = await Product.find({ category: cat })
+      productsByCategory.push({ category: cat, products: allProducts })
+    }
+    console.log('bakend of category products are', productsByCategory)
     return res.status(200).json({
       success: true,
       data: productsByCategory
@@ -182,16 +182,16 @@ const getCategoryProducts = async (req, res) => {
   }
 }
 
-const getProductsPerCategory = async (req, res) =>{
-  try{
+const getProductsPerCategory = async (req, res) => {
+  try {
     const catName = req.params;
-    const products = await Product.find({category: catName.catName})
+    const products = await Product.find({ category: catName.catName })
     return res.status(200).json({
       success: true,
       data: products
     })
     console.log(catName)
-  }catch (err) {
+  } catch (err) {
 
     console.log('getting  products per category error is', err.message)
     return res.status(500).json({
@@ -203,8 +203,8 @@ const getProductsPerCategory = async (req, res) =>{
 export {
   uploadProduct,
   getAllProducts,
-  updateProduct, 
+  updateProduct,
   getProductData,
-  getCategoryProducts, 
+  getCategoryProducts,
   getProductsPerCategory
 }
