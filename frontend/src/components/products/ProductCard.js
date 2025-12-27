@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-
+import { addToCart } from '@/helpers/addToCart'
 const ProductCard = ({ product }) => {
     return (
         <div className="flex items-center gap-4 bg-slate-200 p-4 rounded-md shadow-md border border-gray-300">
@@ -25,7 +25,15 @@ const ProductCard = ({ product }) => {
                 <p className="text-[14px] font-semibold text-red-500">
                     ${product.price}
                 </p>
+
+                <button className="bg-orange-500 border-orange-500 hover:bg-white text-white hover:text-orange-500 hover:border-orange-500 border 
+                    text-[14px]  py-2 px-4 rounded-md tranition-all duration-300 "
+                    onClick={(e) => addToCart(e, product?._id)}
+                >
+                    Add to cart
+                </button>
             </div>
+
 
         </div>
     )

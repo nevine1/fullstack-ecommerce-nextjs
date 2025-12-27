@@ -4,7 +4,8 @@ import {
     uploadProduct, getAllProducts,
     getProductData, updateProduct,
     getCategoryProducts,
-    getProductsPerCategory
+    getProductsPerCategory,
+    getProductDetails
 } from '../controller/productController.js'
 const productRoute = express.Router();
 
@@ -17,5 +18,6 @@ productRoute.put('/update-product/:id', upload.array('images', 5), updateProduct
 productRoute.get('/get-products', getAllProducts);
 productRoute.get('/get-category-products', getCategoryProducts);
 productRoute.get('/get-products-for-category/:catName', getProductsPerCategory);
+productRoute.get('/get-product-details/:id', getProductDetails)
 
 export default productRoute; 
