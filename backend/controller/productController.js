@@ -204,7 +204,8 @@ const getProductsPerCategory = async (req, res) => {
 //api to get product details 
 const getProductDetails = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id;
+    console.log('backend id is:', id)
     const product = await Product.findById(id);
 
     if (!product) {
@@ -213,6 +214,7 @@ const getProductDetails = async (req, res) => {
         message: "This product is not found"
       })
     }
+    console.log('backend product is:',)
     return res.status(200).json({
       success: true,
       data: product
