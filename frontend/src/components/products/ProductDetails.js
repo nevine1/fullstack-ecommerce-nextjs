@@ -33,45 +33,43 @@ const ProductDetails = () => {
             fetchProductDetails()
         }
     }, [id, dispatch])
-
+    console.log('product info is:', productInfo)
     const productImageListLoading = new Array(4).fill(null)
 
     return (
         <div className="container mx-auto px-12 py-6">
+            <div>
+                <h1>{productInfo?.name}</h1>
+            </div>
             <div className="min-h-[200px]">
                 {/* images */}
-                <div className="h-94">
-                    {
-                        isLoading ? (
-                            <div className="flex lg:flex-col gap-4 overflow-scroll scrollbar-none h-full">
-                                {productImageListLoading.map((_, index) => (
-                                    <div
-                                        key={index}
-                                        className="h-20 w-20 bg-gray-200 rounded-md animate-pulse"
-                                    />
-                                ))}
+                <div className="h-94 flex flex-col lg:flex-row-reverse gap-6">
+                    <div className="h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-400">
+
+                    </div>
+
+                    <div className="flex lg:flex-col gap-4 overflow-scroll scrollbar-none h-full">
+                        {productInfo?.images?.map((img, i) => (
+                            <div
+                                key={i}
+                                className="h-20 w-20 bg-gray-200 rounded-md"
+                            >
+                                <Image
+                                    src={img}
+                                    alt="product image"
+                                    width={80}
+                                    height={80}
+                                    className="object-cover rounded-md"
+                                />
                             </div>
-                        ) : (
-                            <div className="flex lg:flex-col gap-4 overflow-scroll scrollbar-none h-full">
-                                {productInfo?.images?.map((img, i) => (
-                                    <div
-                                        key={i}
-                                        className="h-20 w-20 bg-gray-200 rounded-md"
-                                    >
-                                        <Image
-                                            src={img}
-                                            alt="product image"
-                                            width={80}
-                                            height={80}
-                                            className="object-cover rounded-md"
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        )
-                    }
+                        ))}
+                    </div>
+
+
                 </div>
+
             </div>
+
         </div>
     )
 }
