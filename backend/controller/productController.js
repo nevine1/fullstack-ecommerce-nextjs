@@ -162,7 +162,9 @@ const getCategoryProducts = async (req, res) => {
 
 
     const category = await Product.find().distinct("category");
+
     const productsByCategory = [];
+
     for (const cat of category) {
       const allProducts = await Product.find({ category: cat })
       productsByCategory.push({ category: cat, products: allProducts })

@@ -8,11 +8,14 @@ import Image from "next/image"
 import { setProductDetails, setIsLoading } from "../../store/slices/productsSlice"
 import { FaStar } from "react-icons/fa"
 import { FaStarHalfStroke } from "react-icons/fa6"
+import { useRouter } from "next/navigation"
+import RecommendedProducts from "./RecommendedProducts"
 
 const ProductDetails = () => {
     const { productInfo, isLoading } = useSelector((state) => state.products)
     const dispatch = useDispatch()
     const { id } = useParams()
+    const router = useRouter();
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
     const [imgValue, setImgValue] = useState(null)
@@ -159,15 +162,16 @@ const ProductDetails = () => {
                     </p>
 
                     <div className="flex gap-4 mt-4">
-                        <button className="py-2 px-6 rounded-full bg-orange-400 hover:bg-orange-500 text-white transition">
+                        <button className="py-2 px-6 font-bold rounded-full bg-orange-400 hover:bg-orange-500 text-white transition">
                             Add to cart
                         </button>
-                        <button className="py-2 px-6 rounded-full bg-orange-200 hover:bg-orange-300 text-slate-700 transition">
-                            Buy Now
+                        <button className="py-2 px-6 font-bold rounded-full bg-orange-400 hover:bg-orange-500 text-white transition" onClick={() => router.push('/')}>
+                            Continue shopping
                         </button>
                     </div>
                 </div>
             </div>
+            <RecommendedProducts category={productInfo?.category} />
         </div>
     )
 }
