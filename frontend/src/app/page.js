@@ -3,6 +3,7 @@ import { useState } from 'react'
 import CategoryProducts from "@/components/categories/CategoryProducts";
 import BannerProduct from "@/components/mainComponents/BannerProduct";
 import HorizontalProuctCart from "@/components/products/HorizontalProuctCart";
+import HomeProducts from '@/components/products/HomeProducts';
 
 export default function Home() {
 
@@ -11,7 +12,8 @@ export default function Home() {
     <div className=" m-0  p-0" >
       <CategoryProducts />
       <BannerProduct />
-      <HorizontalProuctCart /* category={selectedCategory} */ />
+      {/* <HorizontalProuctCart  category={selectedCategory}  /> */}
+      <HomeProducts />
     </div>
   );
 }

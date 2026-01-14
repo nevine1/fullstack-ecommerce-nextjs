@@ -5,7 +5,8 @@ import Link from 'next/link'
 const ProductCard = ({ product }) => {
     return (
         <div >
-            <Link href={`/products/${product._id}`}>
+            {/* <Link href={`/products/${product._id}`}> */}
+            <Link href={`/categories/${product.category}/${product._id}`}>
                 <div className="flex items-center gap-4 bg-slate-200 p-4 rounded-md shadow-md border border-gray-300">
 
 
