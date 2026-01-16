@@ -14,7 +14,7 @@ import RecommendedProducts from "./RecommendedProducts"
 const ProductDetails = () => {
     const { productInfo, isLoading } = useSelector((state) => state.products)
     const dispatch = useDispatch()
-    const { id } = useParams()
+    const { productId } = useParams()
     const router = useRouter();
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
@@ -26,7 +26,7 @@ const ProductDetails = () => {
         try {
             dispatch(setIsLoading(true))
             const res = await axios.get(
-                `${backUrl}/api/products/get-product-details/${id}`
+                `${backUrl}/api/products/get-product-details/${productId}`
             )
 
             if (res.data.success) {
@@ -40,8 +40,8 @@ const ProductDetails = () => {
     }
 
     useEffect(() => {
-        if (id) fetchProductDetails()
-    }, [id])
+        if (productId) fetchProductDetails()
+    }, [productId])
 
 
     useEffect(() => {
@@ -51,14 +51,14 @@ const ProductDetails = () => {
     }, [productInfo])
 
     // zoom handlers
-    const handleMouseMove = (e) => {
-        const { left, top, width, height } = e.currentTarget.getBoundingClientRect()
-
-        const x = ((e.pageX - left) / width) * 100
-        const y = ((e.pageY - top) / height) * 100
-
-        setBgPosition(`${x}% ${y}%`)
-    }
+    /*  const handleMouseMove = (e) => {
+         const { left, top, width, height } = e.currentTarget.getBoundingClientRect()
+ 
+         const x = ((e.pageX - left) / width) * 100
+         const y = ((e.pageY - top) / height) * 100
+ 
+         setBgPosition(`${x}% ${y}%`)
+     } */
 
     // loading 
     if (isLoading) {
@@ -101,7 +101,7 @@ const ProductDetails = () => {
                         className="relative h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-200 rounded-md overflow-hidden"
                         onMouseEnter={() => setIsHovering(true)}
                         onMouseLeave={() => setIsHovering(false)}
-                        onMouseMove={handleMouseMove}
+                    /* onMouseMove={handleMouseMove} */
                     >
                         {imgValue && (
                             <Image
@@ -171,7 +171,10 @@ const ProductDetails = () => {
                     </div>
                 </div>
             </div>
-            <RecommendedProducts category={productInfo?.category} />
+            <RecommendedProducts
+                category={productInfo?.category}
+                currentProductId={productInfo?._id}
+            />
         </div>
     )
 }

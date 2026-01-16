@@ -186,8 +186,8 @@ const getCategoryProducts = async (req, res) => {
 
 const getProductsPerCategory = async (req, res) => {
   try {
-    const catName = req.params;
-    const products = await Product.find({ category: catName.catName })
+    const { catName } = req.params;
+    const products = await Product.find({ category: catName })
     return res.status(200).json({
       success: true,
       data: products

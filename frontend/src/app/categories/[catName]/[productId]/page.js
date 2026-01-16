@@ -1,7 +1,7 @@
 "use client"
-import ProductDetails from '../../../components/categories/ProductDetails'
+import React from 'react'
+import ProductDetails from "@/components/categories/ProductDetails"
 const page = () => {
-
 
     return (
         <div>
@@ -9,7 +9,5 @@ const page = () => {
         </div>
     )
 }
-
-
 
 export default page
