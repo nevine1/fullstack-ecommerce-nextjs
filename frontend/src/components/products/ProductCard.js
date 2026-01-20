@@ -2,47 +2,77 @@ import React from 'react'
 import Image from 'next/image'
 import { addToCart } from '@/helpers/addToCart'
 import Link from 'next/link'
+import { FaStar } from "react-icons/fa"
+import { FaStarHalfStroke } from "react-icons/fa6"
+
 const ProductCard = ({ product }) => {
     return (
-        <div >
+        <div className="bg-slate-100 rounded-lg shadow-md border border-gray-300 p-6 
+                        flex flex-col gap-4 hover:shadow-lg transition-all duration-300">
+
+            {/* IMAGE + LINK */}
             <Link href={`/categories/${product.category}/${product._id}`}>
-                <div className="flex items-center gap-4 bg-slate-200 px-8 py-6 rounded-md shadow-md border border-gray-300">
-
-
-                    <div className="flex-shrink-0 w-28 h-28 bg-slate-200 rounded-md flex items-center justify-center">
-                        <Image
-                            src={product?.images[1]}
-                            alt="product image"
-                            width={100}
-                            height={100}
-                            className="object-contain mix-blend-multiply overflow-hidden rounded-md"
-                        />
-                    </div>
-
-
-                    <div className="flex flex-col gap-4">
-                        <h1 className="text-[16px] font-medium text-gray-700 text-[14px]">
-                            {product.name.slice(0, 12)}
-                        </h1>
-                        <div className="flex flex-row items-center gap-4">
-                            <p className="text-[14px] font-semibold text-red-500">
-                                ${product.price}
-                            </p>
-                            <p className="text-[14px] font-semibold text-gray-400 line-through">
-                                ${product.sellingPrice}
-                            </p>
-                        </div>
-
-
-                        <button className="bg-orange-500 border-orange-500 hover:bg-white text-white hover:text-orange-500 hover:border-orange-500 border 
-                    text-[14px]  py-2 px-4 rounded-md tranition-all duration-300 "
-                            onClick={(e) => addToCart(e, product?._id)}
-                        >
-                            Add to cart
-                        </button>
-                    </div>
+                <div className="flex justify-center items-center h-40  mb-4 cursor-pointer">
+                    <Image
+                        src={product?.images?.[0]}
+                        alt={product.name}
+                        width={160}
+                        height={160}
+                        className="object-contain mix-blend-multiply"
+                    />
                 </div>
-            </Link >
+
+                <div className="flex flex-col gap-3">
+
+                    <h1 className="text-sm font-semibold text-gray-700">
+                        {product.name.slice(0, 20)}
+                    </h1>
+
+                    <div className="flex items-center gap-4">
+                        <p className="text-red-500 font-bold text-lg">
+                            ${product.price}
+                        </p>
+
+
+                        <p className="text-gray-400 line-through font-bold text-lg">
+                            ${product.sellingPrice}
+                        </p>
+                        {
+                            product?.sellingPrice && (
+                                <div className="text-green-500 text-semibold text-lg ">
+                                    <span className=""> Save </span>
+                                    <span>${Math.max(0, product.sellingPrice - product.price)}</span>
+                                </div>
+
+
+
+                            )
+                        }
+                    </div>
+
+                    <div className="flex items-center text-yellow-500 text-sm">
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStar />
+                        <FaStarHalfStroke />
+                    </div>
+
+                    <p className="text-sm text-slate-600 line-clamp-2">
+                        {product.description}
+                    </p>
+                </div>
+            </Link>
+
+            <button
+                className="mt-2 mb-4 bg-orange-500 text-white text-sm font-semibold
+                               py-2 rounded-md border border-orange-500
+                               hover:bg-white hover:text-orange-500
+                               transition-all duration-300"
+                onClick={(e) => addToCart(e, product._id)}
+            >
+                Add to cart
+            </button>
         </div >
     )
 }

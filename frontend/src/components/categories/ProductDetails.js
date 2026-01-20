@@ -148,13 +148,21 @@ const ProductDetails = () => {
                         <FaStarHalfStroke />
                     </div>
 
-                    <div className="flex gap-4 items-center">
+                    <div className="flex gap-4 items-center ">
                         <p className="text-orange-500 font-semibold text-lg">
                             ${productInfo?.price}
                         </p>
                         <p className="text-slate-400 line-through font-semibold text-lg">
                             ${productInfo?.sellingPrice}
                         </p>
+                        {
+                            productInfo?.sellingPrice && (
+                                <div className="text-green-500 text-lg text-bold">
+                                    <span>Save </span>
+                                    <span>${Math.max(0, productInfo?.sellingPrice - productInfo?.price)}</span>
+                                </div>
+                            )
+                        }
                     </div>
 
                     <p className="text-sm text-slate-600">
@@ -162,10 +170,17 @@ const ProductDetails = () => {
                     </p>
 
                     <div className="flex gap-4 mt-4">
-                        <button className="py-2 px-6 font-bold rounded-full bg-orange-400 hover:bg-orange-500 text-white transition">
+                        <button className="mt-2 mb-4 bg-orange-500 text-white text-sm font-semibold
+                               py-2 rounded-md border border-orange-500 py-2 px-6
+                               hover:bg-white hover:text-orange-500
+                               transition-all duration-300">
                             Add to cart
                         </button>
-                        <button className="py-2 px-6 font-bold rounded-full bg-orange-400 hover:bg-orange-500 text-white transition" onClick={() => router.push('/')}>
+                        <button className="mt-2 mb-4 bg-orange-500 text-white text-sm font-semibold
+                               py-2 rounded-md border border-orange-500 py-2 px-6
+                               hover:bg-white hover:text-orange-500
+                               transition-all duration-300"
+                            onClick={() => router.push('/')}>
                             Continue shopping
                         </button>
                     </div>

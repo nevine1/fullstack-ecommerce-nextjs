@@ -1,5 +1,5 @@
-import Cart from '../models/Cart.js'
-import { userAuth } from '../middleware/authUser.js'
+import Cart from '../models/CartModel.js'
+
 
 const addToCart = async (req, res) => {
     try {

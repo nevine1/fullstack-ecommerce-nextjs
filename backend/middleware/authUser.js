@@ -19,13 +19,13 @@ const authUser = async (req, res, next) => {
 
     const decodedToken = jwt.verify(userToken, process.env.JWT_SECRET);
     //console.log('Decoded token:', decodedToken);
-    
-      req.userId = decodedToken.id // getting id from the decoded token ,
-      //  then use userId in userController to find the user and getting all his data 
-    
-      next();
+
+    req.userId = decodedToken.id // getting id from the decoded token ,
+    //  then use userId in userController to find the user and getting all his data 
+
+    next();
   } catch (err) {
-   // console.error(' JWT verification error:', err.message);
+    // console.error(' JWT verification error:', err.message);
     return res.status(401).json({
       success: false,
       message: 'Not authorized, token failed',
