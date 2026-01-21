@@ -10,9 +10,11 @@ import { FaStar } from "react-icons/fa"
 import { FaStarHalfStroke } from "react-icons/fa6"
 import { useRouter } from "next/navigation"
 import RecommendedProducts from "./RecommendedProducts"
-
+import { setCartItems, setIsCartLoading } from "@/store/slices/cartSlice"
 const ProductDetails = () => {
     const { productInfo, isLoading } = useSelector((state) => state.products)
+    const { userToken } = useSelector((state) => state.users)
+    const { cartItems } = useSelector((state) => state.cart)
     const dispatch = useDispatch()
     const { productId } = useParams()
     const router = useRouter();
@@ -50,17 +52,7 @@ const ProductDetails = () => {
         }
     }, [productInfo])
 
-    // zoom handlers
-    /*  const handleMouseMove = (e) => {
-         const { left, top, width, height } = e.currentTarget.getBoundingClientRect()
- 
-         const x = ((e.pageX - left) / width) * 100
-         const y = ((e.pageY - top) / height) * 100
- 
-         setBgPosition(`${x}% ${y}%`)
-     } */
 
-    // loading 
     if (isLoading) {
         return (
             <div className="container mx-auto px-12 py-20 text-center">
@@ -69,6 +61,33 @@ const ProductDetails = () => {
         )
     }
 
+    const handleAddToCart = async () => {
+        try {
+            dispatch(setIsCartLoading(true))
+
+            const res = await axios.post(
+                `${backUrl}/api/cart/add-to-cart`,
+                { productId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`
+                    }
+                }
+            )
+
+            if (res.data.success) {
+                dispatch(setCartItems(res.data.data))
+
+                router.push('/cart')
+            }
+        } catch (error) {
+            console.error("Error adding to cart:", error)
+        } finally {
+            dispatch(setIsCartLoading(false))
+        }
+    }
+
+    console.log('cart items are ', cartItems)
     return (
         <div className="container mx-auto px-12 py-6">
             <h1 className="text-xl font-semibold mb-4">{productInfo?.name}</h1>
@@ -173,7 +192,9 @@ const ProductDetails = () => {
                         <button className="mt-2 mb-4 bg-orange-500 text-white text-sm font-semibold
                                py-2 rounded-md border border-orange-500 py-2 px-6
                                hover:bg-white hover:text-orange-500
-                               transition-all duration-300">
+                               transition-all duration-300"
+                            onClick={handleAddToCart}
+                        >
                             Add to cart
                         </button>
                         <button className="mt-2 mb-4 bg-orange-500 text-white text-sm font-semibold
