@@ -14,23 +14,32 @@ const AddToCart = ({ productId }) => {
 
     const fetchCartItems = async () => {
         try {
-            dispatch(setCartItems(true));
-            const res = await axios.get(`${backUrl}/api/cart/get-cart-items`, {
-                headers: {
-                    Authorization: `Bearer ${userToken}`
-                }
+            dispatch(setIsCartLoading(true))
 
-            })
+            const res = await axios.get(`${backUrl}/api/cart/get-cart-items`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`
+                    }
+                }
+            )
+
             if (res.data.success) {
                 dispatch(setCartItems(res.data.data))
             }
-
         } catch (err) {
             console.log("error while fetching cart items", err.message)
         } finally {
             dispatch(setIsCartLoading(false))
         }
     }
+
+
+    useEffect(() => {
+        if (userToken) {
+            fetchCartItems();
+        }
+    }, [userToken])
     return (
         <div>
             <p>the length of cart items is: {cartItems.length} </p>
