@@ -47,4 +47,33 @@ const addToCart = async (req, res) => {
     }
 }
 
-export { addToCart }
+
+//api to get all products in the cart 
+const getCartItems = async (req, res) => {
+    try {
+        const userId = req.userId;
+
+        if (!userId) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized user",
+            });
+        }
+
+        const cartItems = await Cart.find({ userId })
+            .populate("productId");
+
+        return res.status(200).json({
+            success: true,
+            message: "Cart items fetched successfully",
+            data: cartItems,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+export { addToCart, getCartItems }
