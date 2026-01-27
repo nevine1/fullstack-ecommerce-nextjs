@@ -19,7 +19,7 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
   const { userToken, userInfo } = useSelector((state) => state.users);
-
+  const { cartItems } = useSelector((state) => state.cart)
   const menuItems = [
     { name: "Shop", href: "/" },
     { name: "Women", href: "/women" },
@@ -58,11 +58,10 @@ const Navbar = () => {
             <li key={item.name} className="relative group">
               <Link
                 href={item.href}
-                className={`transition-colors duration-300 ${
-                  pathname === item.href
-                    ? "text-red-500 font-medium"
-                    : "text-gray-700 hover:text-red-400"
-                }`}
+                className={`transition-colors duration-300 ${pathname === item.href
+                  ? "text-red-500 font-medium"
+                  : "text-gray-700 hover:text-red-400"
+                  }`}
               >
                 {item.name}
               </Link>
@@ -86,12 +85,18 @@ const Navbar = () => {
           </div>
 
           {/* Cart Icon */}
-          <div className="relative cursor-pointer">
+          <Link className="relative cursor-pointer" href="/cart">
             <IoCartOutline className="w-7 h-7 text-gray-700" />
             <span className="absolute -top-1 -right-2 bg-red-500 text-white text-[10px] font-bold w-4 h-4 flex items-center justify-center rounded-full">
-              0
+              {
+                cartItems.length > 0 ? (
+                  <span>{cartItems?.length}</span>
+                ) : (
+                  null
+                )
+              }
             </span>
-          </div>
+          </Link>
 
           {/* User Section */}
           {userToken ? (
@@ -120,7 +125,7 @@ const Navbar = () => {
                 >
                   Profile
                 </Link>
-                
+
                 <button
                   onClick={handleLogout}
                   className="px-4 py-2 text-left text-red-500 hover:bg-gray-100"
@@ -133,8 +138,8 @@ const Navbar = () => {
             <button
               onClick={() => router.push("/auth/login")}
               className="flex items-center gap-1 px-4 py-1.5 border border-orange-600 text-orange-600 text-sm rounded-full hover:bg-orange-600 hover:text-white transition-all"
-              >
-                Login
+            >
+              Login
             </button>
           )}
 
@@ -152,8 +157,8 @@ const Navbar = () => {
         </div>
 
         <div className="flex justify-end  items-center">
-        
-      </div>
+
+        </div>
       </div>
 
       {/* mobile menu */}
@@ -164,9 +169,8 @@ const Navbar = () => {
               <Link
                 href={item.href}
                 onClick={() => setShowMenu(false)}
-                className={`text-gray-700 hover:text-red-500 ${
-                  pathname === item.href ? "text-red-500 font-medium" : ""
-                }`}
+                className={`text-gray-700 hover:text-red-500 ${pathname === item.href ? "text-red-500 font-medium" : ""
+                  }`}
               >
                 {item.name}
               </Link>

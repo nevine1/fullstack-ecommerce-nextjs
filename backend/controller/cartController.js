@@ -76,4 +76,35 @@ const getCartItems = async (req, res) => {
     }
 };
 
-export { addToCart, getCartItems }
+
+//api to increase the quantity of a cart item
+const increaseQty = async (req, res) => {
+    try {
+
+        const { cartItemId } = req.body;
+        const userId = req.userId;
+
+        const cartItem = await Cart.findOne({ _id: cartItemId, userId: userId });
+        if (!cartItem) {
+            return res.status(404).json({
+                success: false,
+                message: "Cart item is not found"
+            })
+        }
+        cartItem.quantity += 1;
+        await cartItem.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Cart item quantity increased",
+            data: cartItem
+        })
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+export { addToCart, getCartItems, increaseQty };
