@@ -14,27 +14,27 @@ const CartProducts = ({ productId }) => {
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
     console.log('cart items are', cartItems)
 
-    const fetchCartItems = async () => {
-        try {
-            dispatch(setIsCartLoading(true))
-
-            const res = await axios.get(`${backUrl}/api/cart/get-cart-items`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`
-                    }
-                }
-            )
-
-            if (res.data.success) {
-                dispatch(setCartItems(res.data.data))
-            }
-        } catch (err) {
-            console.log("error while fetching cart items", err.message)
-        } finally {
-            dispatch(setIsCartLoading(false))
-        }
-    }
+    /*  const fetchCartItems = async () => {
+         try {
+             dispatch(setIsCartLoading(true))
+ 
+             const res = await axios.get(`${backUrl}/api/cart/get-cart-items`,
+                 {
+                     headers: {
+                         Authorization: `Bearer ${userToken}`
+                     }
+                 }
+             )
+ 
+             if (res.data.success) {
+                 dispatch(setCartItems(res.data.data))
+             }
+         } catch (err) {
+             console.log("error while fetching cart items", err.message)
+         } finally {
+             dispatch(setIsCartLoading(false))
+         }
+     } */
 
     const increaseProductQty = async (itemId) => {
         try {
