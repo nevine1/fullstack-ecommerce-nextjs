@@ -93,10 +93,76 @@ const increaseQty = async (req, res) => {
         }
         cartItem.quantity += 1;
         await cartItem.save();
-
+        const allItems = await Cart.find({ userId }).populate("productId");
         return res.status(200).json({
             success: true,
             message: "Cart item quantity increased",
+            data: allItems
+        })
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
+//api to decrease the quantity of a cart item 
+const decreaseQty = async (req, res) => {
+    try {
+        const { cartItemId } = req.body;
+        const userId = req.userId;
+        const cartItem = await Cart.findOne({ _id: cartItemId, userId: userId });
+
+        if (!cartItem) {
+            return res.status(404).json({
+                success: false,
+                message: "Cart item is not found"
+            })
+        }
+
+        if (cartItem.quantity > 1) {
+            cartItem.quantity -= 1;
+            await cartItem.save();
+        } else {
+            await Cart.deleteOne({ _id: cartItemId, userId: userId });
+        }
+        const allItems = await Cart.find({ userId }).populate("productId");
+        return res.status(200).json({
+            success: true,
+            message: "Cart item quantity decreased",
+            data: allItems
+        })
+
+    } catch (err) {
+        return res.status(500).json({
+            success: false,
+            message: err.message
+        })
+    }
+}
+
+// api to update the quantity of a cart item 
+const updateQty = async (req, res) => {
+    try {
+        const { cartItemId, quantity } = req.body;
+        const userId = req.userId;
+        const cartItem = await Cart.findOne({ _id: cartItemId, userId: userId });
+
+        if (!cartItem) {
+            return res.status(404).json({
+                success: false,
+                message: "Cart item is not found"
+            })
+        }
+
+        cartItem.quantity = quantity;
+        await cartItem.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Cart item quantity updated",
             data: cartItem
         })
 
@@ -107,4 +173,10 @@ const increaseQty = async (req, res) => {
         })
     }
 }
-export { addToCart, getCartItems, increaseQty };
+export {
+    addToCart,
+    getCartItems,
+    increaseQty,
+    decreaseQty,
+    updateQty
+};
