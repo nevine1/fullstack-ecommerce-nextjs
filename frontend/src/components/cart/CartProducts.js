@@ -1,11 +1,13 @@
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setCartItems, updateCartItems } from "@/store/slices/cartSlice";
+import { setCartItems, setIsCartLoading } from "@/store/slices/cartSlice";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPlus, FaMinus } from "react-icons/fa";
+import { MdOutlineDeleteForever } from "react-icons/md";
+
 
 const CartProducts = () => {
     const dispatch = useDispatch();
@@ -15,10 +17,7 @@ const CartProducts = () => {
 
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-    const totalQty = cartItems.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-    );
+
     const increaseProductQty = async (itemId) => {
         try {
             const res = await axios.post(
@@ -61,8 +60,33 @@ const CartProducts = () => {
     };
 
 
+    //delete cart item 
+    const deleteCartItem = async (itemId) => {
+        try {
+            dispatch(setIsCartLoading(true));
 
+            const res = await axios.post(
+                `${backUrl}/api/cart/delete-item`, { cartItemId: itemId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                }
+            );
 
+            if (res.data.success) {
+                dispatch(setCartItems(res.data.data));
+            }
+
+        } catch (err) {
+            console.log("error while deleting cart item", err.message);
+        }
+    }
+
+    //calculate total quantity of items in cart 
+    const totalQty = Array.isArray(cartItems)
+        ? cartItems.reduce((sum, item) => sum + item.quantity, 0)
+        : 0;
     return (
         <div className="mx-20 my-10">
             <div className="md:grid md:grid-cols-[3fr_1fr] gap-6 sm:flex sm:flex-col">
@@ -113,6 +137,10 @@ const CartProducts = () => {
                                     <FaMinus
                                         className="cursor-pointer text-blue-500"
                                         onClick={() => decreaseProductQty(item._id)}
+                                    />
+                                    <MdOutlineDeleteForever className="cursor-pointer text-red-500"
+                                        onClick={() => deleteCartItem(item._id)}
+                                        size={22}
                                     />
                                 </div>
                             </div>
