@@ -1,7 +1,7 @@
 "use client";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setCartItems } from "@/store/slices/cartSlice";
+import { setCartItems, updateCartItems } from "@/store/slices/cartSlice";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
