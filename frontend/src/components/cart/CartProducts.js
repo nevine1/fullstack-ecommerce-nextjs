@@ -16,6 +16,8 @@ const CartProducts = () => {
 
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+
+
     const increaseProductQty = async (itemId) => {
         try {
             const res = await axios.post(
@@ -75,22 +77,36 @@ const CartProducts = () => {
             }
         } catch (err) {
             console.log(err.message);
+        } finally {
+            dispatch(setIsCartLoading(false));
         }
     };
+
+    /* ================== calculations  ================== */
 
     const totalQty = Array.isArray(cartItems)
         ? cartItems.reduce((sum, item) => sum + item.quantity, 0)
         : 0;
 
     const totalPrice = Array.isArray(cartItems)
-        ? cartItems.reduce((sum, item) => sum + item.selllingPrice, 0)
+        ? cartItems.reduce(
+            (sum, item) => sum + item.productId.price * item.quantity,
+            0
+        )
         : 0;
+
+    const tax = totalPrice * 0.13;
+    const shipping = cartItems.length > 0 ? 50 : 0;
+    const finalTotal = totalPrice + tax + shipping;
+
+
+
     return (
         <div className="max-w-7xl mx-auto px-6 py-12">
             <h1 className="text-3xl font-bold mb-8">🛒 Shopping Cart</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr] gap-8">
-                {/* LEFT SIDE */}
+                {/* left side */}
                 <div>
                     {cartItems.length === 0 && (
                         <div className="bg-white rounded-xl p-10 text-center shadow-sm">
@@ -107,7 +123,7 @@ const CartProducts = () => {
                     {cartItems.map((item) => (
                         <div
                             key={item._id}
-                            className="flex items-center gap-6 bg-slate-100 hove:bg-slate-200 p-5 mb-5 rounded-xl shadow-sm hover:shadow-md transition"
+                            className="flex items-center gap-6 bg-slate-100 hover:bg-slate-200 p-5 mb-5 rounded-xl shadow-sm hover:shadow-md transition"
                         >
                             <Image
                                 src={item.productId.images[0]}
@@ -118,15 +134,21 @@ const CartProducts = () => {
                             />
 
                             <div className="flex-1">
-                                <h3 className="font-semibold text-lg mb-2">
-                                    {item.productId.name.slice(0, 60)}
+                                <h3 className="text-[16px] text-gray-600 mb-4">
+                                    {item.productId.name}
                                 </h3>
 
                                 <div className="flex items-center gap-4">
                                     <div className="flex items-center gap-3 border border-orange-300 rounded-lg px-3 py-2">
                                         <FaMinus
-                                            className="cursor-pointer text-gray-600 hover:text-black transition"
-                                            onClick={() => decreaseProductQty(item._id)}
+                                            className={`cursor-pointer ${item.quantity === 1
+                                                ? "text-gray-300 cursor-not-allowed"
+                                                : "text-gray-600 hover:text-black"
+                                                }`}
+                                            onClick={() =>
+                                                item.quantity > 1 &&
+                                                decreaseProductQty(item._id)
+                                            }
                                         />
 
                                         <span className="font-medium">
@@ -135,42 +157,68 @@ const CartProducts = () => {
 
                                         <FaPlus
                                             className="cursor-pointer text-gray-600 hover:text-black transition"
-                                            onClick={() => increaseProductQty(item._id)}
+                                            onClick={() =>
+                                                increaseProductQty(item._id)
+                                            }
                                         />
                                     </div>
 
                                     <MdOutlineDeleteForever
                                         className="cursor-pointer text-red-500 hover:text-red-700 transition"
                                         size={24}
-                                        onClick={() => deleteCartItem(item._id)}
+                                        onClick={() =>
+                                            deleteCartItem(item._id)
+                                        }
                                     />
                                 </div>
                             </div>
                         </div>
                     ))}
 
-                    <Link href="/" className="mt-2 mb-4 bg-orange-500 text-white text-sm font-semibold
-                               py-2 rounded-md border border-orange-500 py-2 px-6
-                               hover:bg-white hover:text-orange-500
-                               transition-all duration-300">Continue Shopping </Link>
+                    {cartItems.length > 0 && (
+                        <Link
+                            href="/"
+                            className="inline-block mt-2 bg-orange-500 text-white text-sm font-semibold px-6 py-2 rounded-md border border-orange-500 hover:bg-white hover:text-orange-500 transition-all duration-300"
+                        >
+                            Continue Shopping
+                        </Link>
+                    )}
                 </div>
 
-                {/* right side , total items */}
+                {/* right side */}
                 <div className="sticky top-24 h-fit">
                     <div className="bg-white rounded-xl p-6 shadow-md">
-                        <h2 className="text-xl font-semibold mb-6">
+                        <h2 className="text-xl font-semibold mb-6 text-orange-500">
                             Cart Summary
                         </h2>
 
                         <div className="flex justify-between mb-4">
-                            <span>Total Items({totalQty})</span>
-                            <span className="font-semibold"> ${totalPrice}</span>
+                            <span>Total Items ({totalQty})</span>
+                            <span className="font-semibold">
+                                ${totalPrice.toFixed(2)}
+                            </span>
                         </div>
 
-                        <button className="mt-2 mb-4 bg-orange-500 text-white text-sm font-semibold
-                               py-2 rounded-md border border-orange-500 py-2 px-6
-                               hover:bg-white hover:text-orange-500
-                               transition-all duration-300">
+                        <div className="flex justify-between mb-4">
+                            <span>H.S.T (13%)</span>
+                            <span className="font-semibold">
+                                ${tax.toFixed(2)}
+                            </span>
+                        </div>
+
+                        <div className="flex justify-between mb-4">
+                            <span>Shipping</span>
+                            <span className="font-semibold">
+                                ${shipping.toFixed(2)}
+                            </span>
+                        </div>
+
+                        <div className="flex justify-between mb-4 text-lg font-bold">
+                            <span>Total Amount</span>
+                            <span>${finalTotal.toFixed(2)}</span>
+                        </div>
+
+                        <button className="w-full mt-4 bg-orange-500 text-white text-sm font-semibold py-2 rounded-md border border-orange-500 hover:bg-white hover:text-orange-500 transition-all duration-300">
                             Proceed to Checkout
                         </button>
                     </div>
