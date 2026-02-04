@@ -20,7 +20,7 @@ const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useDispatch();
-
+  const [search, setSearch] = useState("");
   const [showMenu, setShowMenu] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
@@ -71,6 +71,16 @@ const Navbar = () => {
   }, [userToken]);
 
 
+
+  // handle search 
+  const handleSearch = () => {
+    if (!search.trim()) return;
+
+    router.push(`/search?q=${encodeURIComponent(search)}`);
+    setSearch("");
+  };
+
+  //logout 
   const handleLogout = () => {
     dispatch(userLogout());
     router.push("/");
@@ -122,8 +132,18 @@ const Navbar = () => {
               type="text"
               placeholder="Search..."
               className="bg-transparent outline-none text-sm w-28 md:w-44"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
-            <CiSearch className="text-gray-600" />
+
+            <CiSearch className="text-gray-600"
+              onClick={handleSearch()}
+            />
           </div>
 
           {/* Cart */}

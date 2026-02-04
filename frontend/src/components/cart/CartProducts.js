@@ -96,7 +96,9 @@ const CartProducts = () => {
         : 0;
 
     const tax = totalPrice * 0.13;
-    const shipping = cartItems.length > 0 ? 50 : 0;
+    /*  const shipping = cartItems.length > 0 ? 50 : 0; */
+    const shipping_fee = 50;
+    const shipping = totalPrice <= 600 && cartItems.length > 0 ? 0 : shipping_fee;
     const finalTotal = totalPrice + tax + shipping;
 
 
@@ -186,34 +188,37 @@ const CartProducts = () => {
                 </div>
 
                 {/* right side */}
-                <div className="sticky top-24 h-fit">
-                    <div className="bg-white rounded-xl p-6 shadow-md">
-                        <h2 className="text-xl font-semibold mb-6 text-orange-500">
+                <div className="sticky top-24 h-fit ">
+                    <div className="rounded-xl p-6 shadow-md bg-slate-100 hover:bg-slate-200 ">
+                        <h2 className="text-xl font-semibold mb-6 text-center text-orange-500">
                             Cart Summary
                         </h2>
 
-                        <div className="flex justify-between mb-4">
+                        <div className="flex justify-between mb-4 text-[15px]">
                             <span>Total Items ({totalQty})</span>
-                            <span className="font-semibold">
+                            <span className="font-semibold ">
                                 ${totalPrice.toFixed(2)}
                             </span>
                         </div>
 
-                        <div className="flex justify-between mb-4">
+                        <div className="flex justify-between mb-4 text-[15px]">
                             <span>H.S.T (13%)</span>
                             <span className="font-semibold">
                                 ${tax.toFixed(2)}
                             </span>
                         </div>
 
-                        <div className="flex justify-between mb-4">
+                        <div className="flex justify-between mb-4 text-[15px]">
                             <span>Shipping</span>
                             <span className="font-semibold">
-                                ${shipping.toFixed(2)}
+                                {
+                                    shipping === 0 ? "Free" : `$(${shipping.toFixed(2)} )`
+                                }
                             </span>
+
                         </div>
 
-                        <div className="flex justify-between mb-4 text-lg font-bold">
+                        <div className="flex justify-between mb-4 text-lg font-semibold ">
                             <span>Total Amount</span>
                             <span>${finalTotal.toFixed(2)}</span>
                         </div>

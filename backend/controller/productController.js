@@ -230,6 +230,37 @@ const getProductDetails = async (req, res) => {
     });
   }
 }
+
+const searchProduct = async (req, res) => {
+  try {
+    const query = req.query.q;
+
+    if (!query) {
+      return res.status(400).json({
+        success: false,
+        message: "Query parameter 'q' is required",
+      });
+    }
+
+    // case insensitive search in product name
+    const products = await Product.find({
+      name: { $regex: query, $options: "i" },
+    });
+
+    res.status(200).json({
+      success: true,
+      data: products,
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+}
+
+
 export {
   uploadProduct,
   getAllProducts,
@@ -237,5 +268,6 @@ export {
   getProductData,
   getCategoryProducts,
   getProductsPerCategory,
-  getProductDetails
+  getProductDetails,
+  searchProduct
 }
