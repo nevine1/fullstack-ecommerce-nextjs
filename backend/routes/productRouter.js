@@ -20,6 +20,6 @@ productRoute.get('/get-products', getAllProducts);
 productRoute.get('/get-category-products', getCategoryProducts);
 productRoute.get('/get-products-for-category/:catName', getProductsPerCategory);
 productRoute.get('/get-product-details/:id', getProductDetails)
-productRoute.get('/search-product', searchProduct)
+productRoute.get('/search', searchProduct)
 
 export default productRoute; 

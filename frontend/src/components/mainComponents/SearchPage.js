@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
+import SearchProductCard from "../products/SearchProductCart";
 
 const SearchPage = () => {
     const searchParams = useSearchParams();
     const query = searchParams.get("q");
-
     const [products, setProducts] = useState([]);
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -18,13 +18,8 @@ const SearchPage = () => {
 
         const fetchResults = async () => {
             try {
-                const res = await axios.get(
-                    `${backUrl}/api/products/search?q=${query}`
-                );
-
-                if (res.data.success) {
-                    setProducts(res.data.data);
-                }
+                const res = await axios.get(`${backUrl}/api/products/search?q=${query}`);
+                if (res.data.success) setProducts(res.data.data);
             } catch (err) {
                 console.error(err.message);
             }
@@ -44,25 +39,8 @@ const SearchPage = () => {
             ) : (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                     {products.map((product) => (
-                        <Link
-                            key={product._id}
-                            href={`/product/${product._id}`}
-                            className="border rounded-lg p-4 hover:shadow-md transition"
-                        >
-                            <Image
-                                src={product.images[0]}
-                                alt={product.name}
-                                width={200}
-                                height={200}
-                                className="object-cover rounded-md"
-                            />
-                            <h3 className="mt-2 text-sm font-medium">
-                                {product.name}
-                            </h3>
-                            <p className="text-orange-500 font-semibold">
-                                ${product.price}
-                            </p>
-                        </Link>
+                        <SearchProductCard product={product} key={product._id} />
+
                     ))}
                 </div>
             )}
