@@ -1,11 +1,13 @@
 "use client"
-import ProductDetails from '../../../components/categories/ProductDetails'
+import ProductSearchtDetails from '../../../components/products/ProductSearchtDetails'
 const page = () => {
 
 
     return (
         <div>
-            <ProductDetails />
+
+            hello page detailssssssssss
+            <ProductSearchtDetails />
 
         </div>
     )

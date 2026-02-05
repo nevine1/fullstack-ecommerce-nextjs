@@ -1,23 +1,23 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useParams } from "next/navigation"
 import axios from "axios"
 import { useSelector, useDispatch } from "react-redux"
 import Image from "next/image"
 import { setProductDetails, setIsLoading } from "../../store/slices/productsSlice"
 import { FaStar } from "react-icons/fa"
 import { FaStarHalfStroke } from "react-icons/fa6"
-import { useRouter } from "next/navigation"
-import RecommendedProducts from "./RecommendedProducts"
+import { useRouter, useParams } from "next/navigation"
+import RecommendedProducts from "../categories/RecommendedProducts"
 import { setCartItems, setIsCartLoading } from "@/store/slices/cartSlice"
-import { addToCart } from "../../store/thunks/cartThunk"
-const ProductDetails = () => {
+import { addToCart } from '../../store/thunks/cartThunk'
+const ProductSearchtDetails = () => {
+    const { id } = useParams();
     const { productInfo, isLoading } = useSelector((state) => state.products)
     const { userToken } = useSelector((state) => state.users)
     const { cartItems } = useSelector((state) => state.cart)
     const dispatch = useDispatch()
-    const { productId } = useParams()
+    /* const { productId } = useParams() */
     const router = useRouter();
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
 
@@ -29,7 +29,7 @@ const ProductDetails = () => {
         try {
             dispatch(setIsLoading(true))
             const res = await axios.get(
-                `${backUrl}/api/products/get-product-details/${productId}`
+                `${backUrl}/api/products/get-product-details/${id}`
             )
 
             if (res.data.success) {
@@ -43,8 +43,8 @@ const ProductDetails = () => {
     }
 
     useEffect(() => {
-        if (productId) fetchProductDetails()
-    }, [productId])
+        if (id) fetchProductDetails()
+    }, [id])
 
 
     useEffect(() => {
@@ -63,7 +63,7 @@ const ProductDetails = () => {
     }
 
     const handleAddToCart = () => {
-        dispatch(addToCart(productId));
+        dispatch(addToCart(id));
         router.push('/cart')
     }
 
@@ -173,7 +173,7 @@ const ProductDetails = () => {
                                py-2 rounded-md border border-orange-500 py-2 px-6
                                hover:bg-white hover:text-orange-500
                                transition-all duration-300"
-                            onClick={handleAddToCart(dispatch, userToken, router)}
+                            onClick={handleAddToCart}
                         >
                             Add to cart
                         </button>
@@ -195,4 +195,4 @@ const ProductDetails = () => {
     )
 }
 
-export default ProductDetails
+export default ProductSearchtDetails
