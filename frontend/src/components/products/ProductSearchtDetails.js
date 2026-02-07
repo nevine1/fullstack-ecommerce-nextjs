@@ -10,8 +10,10 @@ import { FaStarHalfStroke } from "react-icons/fa6"
 import { useRouter, useParams } from "next/navigation"
 import RecommendedProducts from "../categories/RecommendedProducts"
 import { setCartItems, setIsCartLoading } from "@/store/slices/cartSlice"
-import { addToCart } from '../../store/thunks/cartThunk'
+import { addToCart } from '../../store/thunks/cartThunk';
+
 const ProductSearchtDetails = () => {
+
     const { id } = useParams();
     const { productInfo, isLoading } = useSelector((state) => state.products)
     const { userToken } = useSelector((state) => state.users)
@@ -114,6 +116,7 @@ const ProductSearchtDetails = () => {
                         )}
 
                         {/* Zoom Preview */}
+
                         {isHovering && imgValue && (
                             <div className="hidden lg:block absolute top-0 right-[-380px] w-[350px] h-[350px] border-2 border-orange-500 bg-white rounded-md shadow-xl z-50">
                                 <div
