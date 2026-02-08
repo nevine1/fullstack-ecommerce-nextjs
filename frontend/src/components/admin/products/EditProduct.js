@@ -1,109 +1,93 @@
 "use client";
 import { useState, useEffect } from "react";
-import { IoMdCloseCircle, IoMdCloudUpload } from "react-icons/io";
+import { IoMdClose, IoMdCloudUpload } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { productCategory } from "@/helpers/general";
 import Image from "next/image";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useParams, useRouter } from "next/navigation";
-import { setUpdatedProduct , setIsLoading} from '../../../store/slices/productsSlice'
-import Link from "next/link";
+import { setUpdatedProduct, setIsLoading } from '../../../store/slices/productsSlice'
 import { useSelector, useDispatch } from 'react-redux'
 
 const EditProduct = () => {
-  const { productInfo, isLoading } = useSelector((state) => state.products)
+  const { isLoading } = useSelector((state) => state.products)
   const dispatch = useDispatch();
   const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const {id} = useParams();
-  console.log('product id is', id)
+  const { id } = useParams();
   const router = useRouter();
- 
+
   const [productData, setProductData] = useState(null);
-  const [imageFiles, setImageFiles] = useState([]); // new images file objects
-  const [imagePreviews, setImagePreviews] = useState([]); // new image preview URLs
-  const [oldImages, setOldImages] = useState([]); // images already saved in DB
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [oldImages, setOldImages] = useState([]);
 
   const fetchProduct = async () => {
     try {
       dispatch(setIsLoading(true))
       const res = await axios.get(`${backUrl}/api/products/get-product/${id}`);
-        console.log('res is: ', res)
       if (res.data.success) {
         setProductData(res.data.data);
-        setOldImages(res.data.data.images)
-        console.log('old images are', oldImages)
+        setOldImages(res.data.data.images || []);
       }
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      toast.error("Failed to load product data");
     } finally {
       dispatch(setIsLoading(false))
     }
   };
- 
- 
-  useEffect(() => {
-    if (id) {
-      fetchProduct()
-    }
-  }, []);
 
-  
+  useEffect(() => {
+    if (id) fetchProduct();
+    // Cleanup preview URLs on unmount
+    return () => imagePreviews.forEach(url => URL.revokeObjectURL(url));
+  }, [id]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProductData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setProductData((prev) => ({ ...prev, [name]: value }));
   };
- 
-  //upload new images
-  const handleUploadImages = (e) => {
-    const files = Array.from(e.target.files) ;
-    const oldImagesArray = Array.isArray(oldImages) ? oldImages : [];
 
-    if (files.length + imageFiles.length /* + oldImagesArray.length  */> 5) {
-      alert("Maximum 5 images allowed!");
+  const handleUploadImages = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length + imageFiles.length + oldImages.length > 5) {
+      toast.warning("Maximum 5 images allowed total!");
       return;
     }
 
     setImageFiles((prev) => [...prev, ...files]);
-
     const previews = files.map((file) => URL.createObjectURL(file));
     setImagePreviews((prev) => [...prev, ...previews]);
   };
 
   const handleDeleteNewImage = (index) => {
+    URL.revokeObjectURL(imagePreviews[index]); // Free memory
     setImagePreviews(imagePreviews.filter((_, i) => i !== index));
     setImageFiles(imageFiles.filter((_, i) => i !== index));
   };
 
   const handleDeleteOldImage = (index) => {
-  const updatedOld = oldImages.filter((_, i) => i !== index);
-
-  setOldImages(updatedOld);
-
-  // also update productData.images so UI changes
-  setProductData((prev) => ({
-    ...prev,
-    images: updatedOld
-  }));
-};
-
+    const updatedOld = oldImages.filter((_, i) => i !== index);
+    setOldImages(updatedOld);
+    setProductData((prev) => ({ ...prev, images: updatedOld }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      dispatch(setIsLoading(true))
+      dispatch(setIsLoading(true));
       const formData = new FormData();
-      Object.entries(productData).forEach(([key, value]) =>
-        formData.append(key, value)
-      );
 
-      // send images that are already in DB (remaining after delete)
+      // Append text data (excluding the images array which is handled separately)
+      Object.entries(productData).forEach(([key, value]) => {
+        if (key !== "images") formData.append(key, value);
+      });
+
+      // Append remaining existing images
       oldImages.forEach((img) => formData.append("existingImages", img));
 
-      // send new uploaded images
+      // Append new files
       imageFiles.forEach((file) => formData.append("images", file));
 
       const res = await axios.put(
@@ -113,171 +97,156 @@ const EditProduct = () => {
       );
 
       if (res.data.success) {
-        dispatch(setUpdatedProduct(res.data.data))
+        dispatch(setUpdatedProduct(res.data.data));
         toast.success("Product updated successfully!");
-        router.push('/admin/products')
+        router.push('/admin/products');
       }
     } catch (err) {
-      console.log(err);
-      toast.error("Update failed!");
+      console.error(err);
+      toast.error(err.response?.data?.message || "Update failed!");
     } finally {
-      dispatch(setIsLoading(false))
+      dispatch(setIsLoading(false));
     }
   };
 
+  if (!productData && isLoading) return null; // Or a spinner
+
   return (
-    <div className="fixed inset-0 bg-black/60 z-50 flex justify-center items-center">
-      <div className="relative bg-white w-full max-w-lg mx-4 rounded-xl shadow-xl p-6 overflow-y-auto max-h-[90vh] my-4">
-   
-        <div className="flex justify-between items-center">
-          <h1 className="font-bold text-xl text-orange-700 pm-4">Update {productData?.name} information</h1>
+    <div className="fixed inset-0 bg-black/70 z-50 flex justify-center items-center backdrop-blur-sm p-4">
+      <div className="relative bg-white w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+
+        {/* Header */}
+        <div className="flex justify-between items-center p-6 border-b">
+          <h1 className="font-bold text-xl text-gray-800">
+            Edit <span className="text-orange-600">{productData?.name}</span>
+          </h1>
+          <button
+            onClick={() => router.back()}
+            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <IoMdClose size={24} className="text-gray-500" />
+          </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-4">
-          <input
-            type="text"
-            name="name"
-            value={productData?.name || ""}
-            onChange={handleChange}
-            placeholder="Product Name"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-300"
-            required
-          />
-          
-          <select
-            name="category"
-            value={productData?.category || ""}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-300"
-          >
-            <option value="">Select Category</option>
-            {productCategory.map((cat, index) => (
-              <option key={index} value={cat.label}>
-                {cat.value}
-              </option>
-            ))}
-          </select>
+        {/* Form Container */}
+        <form onSubmit={handleSubmit} className="overflow-y-auto p-6 flex flex-col gap-5 custom-scrollbar">
 
-       
-
-          {/* upload new images*/}
-          <label htmlFor="uploadImage">
-            <div className="w-full px-3 py-2 border border-gray-300 rounded-md flex items-center justify-center text-slate-500 cursor-pointer">
-              <div className="flex flex-col gap-2 items-center">
-                <IoMdCloudUpload size={20} />
-                <p>Upload New Images</p>
-              </div>
-            </div>
-          </label>
-
-          <input
-            type="file"
-            id="uploadImage"
-            hidden
-            accept="image/*"
-            multiple
-            onChange={handleUploadImages}
-          />
-
-            
-          <div className="border border-gray-300 rounded-md p-3">
-
-            {/* <p className="text-sm font-semibold text-gray-600 mb-2">Old Images</p> */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {productData?.images.length > 0 ? (
-                productData.images.map((img, i) => (
-                  <div key={i} className="relative group">
-                    <Image
-                      src={img}
-                      alt="Old Image"
-                      width={80}
-                      height={80}
-                      className="rounded-md border bg-white p-1 shadow"
-                    />
-                    <MdDelete
-                      onClick={() => handleDeleteOldImage(i)}
-                      className="absolute bottom-1 right-1 hidden group-hover:flex bg-red-500 text-white rounded-full p-1 text-[22px] cursor-pointer"
-                    />
-                  </div>
-                ))
-              ) : (
-                <p className="text-xs text-gray-400">No  images</p>
-              )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-semibold text-gray-600">Product Name</label>
+              <input
+                type="text"
+                name="name"
+                value={productData?.name || ""}
+                onChange={handleChange}
+                placeholder="Name"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-300 outline-none transition-all"
+                required
+              />
             </div>
 
-            {/* <p className="text-sm font-semibold text-gray-600 mb-2">New Images</p> */}
-            <div className="flex flex-wrap gap-2">
-              {imagePreviews.length > 0 ? (
-                imagePreviews.map((img, i) => (
-                  <div key={i} className="relative group">
-                    <Image
-                      src={img}
-                      alt="Preview"
-                      width={80}
-                      height={80}
-                      className="rounded-md border bg-white p-1 shadow"
-                    />
-                    <MdDelete
-                      onClick={() => handleDeleteNewImage(i)}
-                      className="absolute bottom-1 right-1 hidden group-hover:flex bg-red-500 text-white rounded-full p-1 text-[22px] cursor-pointer"
-                    />
-                  </div>
-                ))
-              ) : (
-                <p className="text-xs text-gray-400">No new images uploaded</p>
-              )}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-semibold text-gray-600">Category</label>
+              <select
+                name="category"
+                value={productData?.category || ""}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-300 outline-none transition-all"
+              >
+                <option value="">Select Category</option>
+                {productCategory.map((cat, index) => (
+                  <option key={index} value={cat.label}>{cat.value}</option>
+                ))}
+              </select>
             </div>
-
           </div>
 
+          {/* Image Upload Section */}
+          <div className="space-y-3">
+            <label className="text-sm font-semibold text-gray-600">Product Images (Max 5)</label>
+            <label htmlFor="uploadImage" className="group">
+              <div className="w-full h-32 border-2 border-dashed border-gray-300 group-hover:border-orange-400 rounded-xl flex flex-col items-center justify-center text-gray-500 cursor-pointer transition-colors bg-gray-50">
+                <IoMdCloudUpload size={30} className="group-hover:text-orange-500 transition-colors" />
+                <p className="text-sm mt-1">Click to upload new images</p>
+              </div>
+            </label>
+            <input type="file" id="uploadImage" hidden accept="image/*" multiple onChange={handleUploadImages} />
 
-       
-          <input
-            type="text"
-            name="brandName"
-            value={productData?.brandName || ""}
-            onChange={handleChange}
-            placeholder="Brand Name"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-300"
-          />
+            {/* Image Preview Grid */}
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 p-3 bg-gray-50 rounded-xl border">
+              {/* Existing Images */}
+              {oldImages.map((img, i) => (
+                <div key={`old-${i}`} className="relative aspect-square group">
+                  <Image src={img} alt="Product" fill className="object-cover rounded-lg border bg-white" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                    <MdDelete
+                      onClick={() => handleDeleteOldImage(i)}
+                      className="text-white text-2xl cursor-pointer hover:scale-110 transition-transform"
+                    />
+                  </div>
+                </div>
+              ))}
+              {/* New Previews */}
+              {imagePreviews.map((img, i) => (
+                <div key={`new-${i}`} className="relative aspect-square group">
+                  <Image src={img} alt="Preview" fill className="object-cover rounded-lg border border-orange-200 bg-white" />
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                    <MdDelete
+                      onClick={() => handleDeleteNewImage(i)}
+                      className="text-white text-2xl cursor-pointer hover:scale-110 transition-transform"
+                    />
+                  </div>
+                  <span className="absolute top-1 left-1 bg-orange-500 text-[8px] text-white px-1 rounded">NEW</span>
+                </div>
+              ))}
+              {oldImages.length === 0 && imagePreviews.length === 0 && (
+                <div className="col-span-full py-4 text-center text-gray-400 text-xs italic">No images selected</div>
+              )}
+            </div>
+          </div>
 
-        
-          <input
-            type="number"
-            name="price"
-            value={productData?.price || ""}
-            onChange={handleChange}
-            placeholder="Main Price"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-300"
-          />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-semibold text-gray-600">Brand</label>
+              <input type="text" name="brandName" value={productData?.brandName || ""} onChange={handleChange} className="px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-orange-300" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-semibold text-gray-600">Base Price</label>
+              <input type="number" name="price" value={productData?.price || ""} onChange={handleChange} className="px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-orange-300" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-semibold text-gray-600">Sale Price</label>
+              <input type="number" name="sellingPrice" value={productData?.sellingPrice || ""} onChange={handleChange} className="px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-orange-300" />
+            </div>
+          </div>
 
-     
-          <input
-            type="number"
-            name="sellingPrice"
-            value={productData?.sellingPrice || ""}
-            onChange={handleChange}
-            placeholder="Selling Price"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-300"
-          />
-        
-          <textarea
-            name="description"
-            rows="4"
-            value={productData?.description || ""}
-            onChange={handleChange}
-            placeholder="Description"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-300"
-          ></textarea>
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold text-gray-600">Description</label>
+            <textarea
+              name="description"
+              rows="3"
+              value={productData?.description || ""}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-300 outline-none transition-all resize-none"
+            ></textarea>
+          </div>
 
-       
-          <button
-            type="submit"
-            className="w-full mt-2 bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 rounded-md shadow"
-            disabled={isLoading}
-          >
-            {isLoading ? "Updating..." : "Update Product"}
-          </button>
+          <div className="flex gap-3 mt-2 pb-2">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2.5 rounded-xl transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="flex-[2] bg-orange-600 hover:bg-orange-700 disabled:bg-orange-400 text-white font-bold py-2.5 rounded-xl shadow-lg shadow-orange-200 transition-all active:scale-[0.98]"
+            >
+              {isLoading ? "Updating..." : "Save Changes"}
+            </button>
+          </div>
         </form>
       </div>
     </div>

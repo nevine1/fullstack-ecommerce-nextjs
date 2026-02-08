@@ -5,8 +5,6 @@ const page = () => {
 
     return (
         <div>
-
-            hello page detailssssssssss
             <ProductSearchtDetails />
 
         </div>
