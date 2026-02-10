@@ -35,3 +35,51 @@ export const addToCart = (productId) => {
 
     }
 }
+
+export const getCartItems = () => {
+
+    return async (dispatch, getState) => {
+
+        try {
+            dispatch(setIsCartLoading(true));
+            const { userToken } = getState().users;
+            const res = await axios.get(`${backUrl}/api/cart/get-cart-items`, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                }
+            })
+
+            if (res.data.success) {
+                dispatch(setCartItems(res.data.data))
+            }
+        } catch (err) {
+            console.error("Error fetching cart items:", err);
+        } finally {
+            dispatch(setIsCartLoading(false))
+        }
+    }
+}
+
+export const increaseProductQty = (itemId) => {
+    return async (dispatch, getState) => {
+        try {
+
+            const { userToken } = getState().users;
+            const res = await axios.post(
+                `${backUrl}/api/cart/increase-qty`,
+                { cartItemId: itemId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                }
+            );
+
+            if (res.data.success) {
+                dispatch(setCartItems(res.data.data));
+            }
+        } catch (err) {
+            console.error("Error increasing product quantity:", err);
+        }
+    }
+}

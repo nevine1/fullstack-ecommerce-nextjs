@@ -1,11 +1,19 @@
 import React from 'react'
 import Image from 'next/image'
-import { addToCart } from '@/helpers/addToCart'
 import Link from 'next/link'
 import { FaStar } from "react-icons/fa"
 import { FaStarHalfStroke } from "react-icons/fa6"
-
+import { addToCart } from '../../store/thunks/cartThunk'
+import { useDispatch } from 'react-redux'
+import { useRouter } from 'next/navigation'
 const ProductCard = ({ product }) => {
+    const router = useRouter();
+    const dispatch = useDispatch();
+
+    const handleAddToCart = () => {
+        dispatch(addToCart(product._id));
+        router.push('/cart')
+    }
     return (
         <div className="bg-slate-100 rounded-lg shadow-md border border-gray-300 p-6 
                         flex flex-col gap-4 hover:shadow-lg transition-all duration-300">
@@ -69,7 +77,7 @@ const ProductCard = ({ product }) => {
                                py-2 rounded-md border border-orange-500
                                hover:bg-white hover:text-orange-500
                                transition-all duration-300"
-                onClick={(e) => addToCart(e, product._id)}
+                onClick={handleAddToCart}
             >
                 Add to cart
             </button>

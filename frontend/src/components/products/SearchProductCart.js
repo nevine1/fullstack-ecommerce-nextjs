@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 const SearchProductCard = ({ product }) => {
     const dispatch = useDispatch();
     const router = useRouter();
+
     const handleAddToCart = () => {
         dispatch(addToCart(product._id));
         router.push('/cart')

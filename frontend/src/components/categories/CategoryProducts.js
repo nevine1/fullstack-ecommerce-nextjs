@@ -32,7 +32,6 @@ const CategoryProducts = () => {
 
   }, [])
 
-
   return (
     <div className="scrollbar-none bg-red-200 p-10 flex  items-center justify-center sm:overflow-hidden  gap-8 m-4 p-6 bg-white">
       {

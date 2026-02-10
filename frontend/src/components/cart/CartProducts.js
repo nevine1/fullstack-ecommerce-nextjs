@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCartItems, setIsCartLoading } from "@/store/slices/cartSlice";
 import axios from "axios";
@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
-
+import { getCartItems, increaseProductQty } from "@/store/thunks/cartThunk";
 const CartProducts = () => {
     const dispatch = useDispatch();
 
@@ -16,9 +16,11 @@ const CartProducts = () => {
 
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+    useEffect(() => {
+        dispatch(getCartItems());
+    }, [dispatch])
 
-
-    const increaseProductQty = async (itemId) => {
+    /* const increaseProductQty = async (itemId) => {
         try {
             const res = await axios.post(
                 `${backUrl}/api/cart/increase-qty`,
@@ -37,7 +39,11 @@ const CartProducts = () => {
             console.log(err.message);
         }
     };
+ */
 
+    const handleIncreaseQty = (itemId) => {
+        dispatch(increaseProductQty(itemId));
+    }
     const decreaseProductQty = async (itemId) => {
         try {
             const res = await axios.post(
@@ -159,9 +165,7 @@ const CartProducts = () => {
 
                                         <FaPlus
                                             className="cursor-pointer text-gray-600 hover:text-black transition"
-                                            onClick={() =>
-                                                increaseProductQty(item._id)
-                                            }
+                                            onClick={() => handleIncreaseQty(item._id)}
                                         />
                                     </div>
 
