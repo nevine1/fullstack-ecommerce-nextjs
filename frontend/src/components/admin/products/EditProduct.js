@@ -170,7 +170,7 @@ const EditProduct = () => {
                 <p className="text-sm mt-1">Click to upload new images</p>
               </div>
             </label>
-            <input type="file" id="uploadImage" hidden accept="image/*" multiple onChange={handleUploadImages} />
+            <input type="file" id="uploadImage" hidden accept="image/*" multiple onChange={handleUploadImages} className="mb-4" />
 
             {/* Image Preview Grid */}
             <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 p-3 bg-gray-50 rounded-xl border">
@@ -186,6 +186,7 @@ const EditProduct = () => {
                   </div>
                 </div>
               ))}
+
               {/* New Previews */}
               {imagePreviews.map((img, i) => (
                 <div key={`new-${i}`} className="relative aspect-square group">

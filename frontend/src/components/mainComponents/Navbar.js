@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { CiSearch } from "react-icons/ci";
 import { IoCartOutline } from "react-icons/io5";
-import { IoMdList, IoMdClose } from "react-icons/io"; // Added Close icon
+import { IoMdList, IoMdClose } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../../assets/logo.png";
 import { userLogout } from "@/store/slices/usersSlice";
+import { fetchCart } from "@/store/thunks/cartThunk";
 
 const Navbar = () => {
   const router = useRouter();
@@ -46,11 +47,10 @@ const Navbar = () => {
   };
 
 
-  /*  useEffect(() => {
-     if(cartItems.length === 0 ){
-       localStorage
-     }
-   }, []) */
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, [])
+
   return (
     <nav className="relative w-full bg-white border-b border-gray-200 shadow-sm z-50">
       <div className="flex items-center justify-between h-20 px-6 md:px-16">

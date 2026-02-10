@@ -40,9 +40,9 @@ const AllProducts = () => {
                     products.map((product) => (
                         <div
                             key={product._id}
-                            className="flex flex-col items-center gap-3 bg-white border border-gray-300 shadow rounded-md p-4"
+                            className="flex flex-col items-center gap-3 bg-white hover:bg-slate-200 border border-gray-300 shadow rounded-md p-4"
                         >
-                            <div className="w-32 h-32 flex items-center justify-center">
+                            <div className="w-32 h-32 relative bg-gray-50 p-2 rounded">
                                 <Image
                                     src={product?.images?.[0] || prodImage}
                                     alt={`${product.name} image`}

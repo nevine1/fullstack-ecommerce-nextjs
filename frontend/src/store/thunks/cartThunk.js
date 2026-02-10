@@ -36,7 +36,7 @@ export const addToCart = (productId) => {
     }
 }
 
-export const getCartItems = () => {
+export const fetchCart = () => {
 
     return async (dispatch, getState) => {
 
@@ -80,6 +80,54 @@ export const increaseProductQty = (itemId) => {
             }
         } catch (err) {
             console.error("Error increasing product quantity:", err);
+        }
+    }
+}
+
+export const decreaseProductQty = (itemId) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch(setIsCartLoading(true));
+
+            const { userToken } = getState().users;
+            const res = await axios.post(`${backUrl}/api/cart/decrease-qty`, { cartItemId: itemId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                }
+            );
+            if (res.data.success) {
+                dispatch(setCartItems(res.data.data));
+            }
+        } catch (err) {
+            console.error("Error decreasing product quantity:", err);
+        } finally {
+            dispatch(setIsCartLoading(false))
+        };
+    }
+}
+
+export const deleteCartItem = (itemId) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch(setIsCartLoading(true));
+
+            const { userToken } = getState().users;
+            const res = await axios.post(`${backUrl}/api/cart/delete-item`, { cartItemId: itemId },
+                {
+                    headers: {
+                        Authorization: `Bearer ${userToken}`,
+                    },
+                }
+            );
+            if (res.data.success) {
+                dispatch(setCartItems(res.data.data));
+            }
+        } catch (err) {
+            console.error("Error deleting cart item:", err);
+        } finally {
+            dispatch(setIsCartLoading(false))
         }
     }
 }

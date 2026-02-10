@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
-import { getCartItems, increaseProductQty } from "@/store/thunks/cartThunk";
+import { fetchCart, increaseProductQty, decreaseProductQty, deleteCartItem } from "@/store/thunks/cartThunk";
 const CartProducts = () => {
     const dispatch = useDispatch();
 
@@ -17,7 +17,7 @@ const CartProducts = () => {
     const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
     useEffect(() => {
-        dispatch(getCartItems());
+        dispatch(fetchCart());
     }, [dispatch])
 
     /* const increaseProductQty = async (itemId) => {
@@ -44,49 +44,14 @@ const CartProducts = () => {
     const handleIncreaseQty = (itemId) => {
         dispatch(increaseProductQty(itemId));
     }
-    const decreaseProductQty = async (itemId) => {
-        try {
-            const res = await axios.post(
-                `${backUrl}/api/cart/decrease-qty`,
-                { cartItemId: itemId },
-                {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`,
-                    },
-                }
-            );
+    const handleDeceaseQty = (itemId) => {
+        dispatch(decreaseProductQty(itemId))
+    }
 
-            if (res.data.success) {
-                dispatch(setCartItems(res.data.data));
-            }
-        } catch (err) {
-            console.log(err.message);
-        }
-    };
+    const handleDeleteCartItem = (itemId) => {
+        dispatch(deleteCartItem(itemId))
+    }
 
-    const deleteCartItem = async (itemId) => {
-        try {
-            dispatch(setIsCartLoading(true));
-
-            const res = await axios.post(
-                `${backUrl}/api/cart/delete-item`,
-                { cartItemId: itemId },
-                {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`,
-                    },
-                }
-            );
-
-            if (res.data.success) {
-                dispatch(setCartItems(res.data.data));
-            }
-        } catch (err) {
-            console.log(err.message);
-        } finally {
-            dispatch(setIsCartLoading(false));
-        }
-    };
 
     /* ================== calculations  ================== */
 
@@ -155,7 +120,7 @@ const CartProducts = () => {
                                                 }`}
                                             onClick={() =>
                                                 item.quantity > 1 &&
-                                                decreaseProductQty(item._id)
+                                                handleDeceaseQty(item._id)
                                             }
                                         />
 
@@ -173,7 +138,7 @@ const CartProducts = () => {
                                         className="cursor-pointer text-red-500 hover:text-red-700 transition"
                                         size={24}
                                         onClick={() =>
-                                            deleteCartItem(item._id)
+                                            handleDeleteCartItem(item._id)
                                         }
                                     />
                                 </div>
