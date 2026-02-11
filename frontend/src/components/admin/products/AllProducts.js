@@ -42,13 +42,13 @@ const AllProducts = () => {
                             key={product._id}
                             className="flex flex-col items-center gap-3 bg-white hover:bg-slate-200 border border-gray-300 shadow rounded-md p-4"
                         >
-                            <div className="w-32 h-32 relative bg-gray-50 p-2 rounded">
+                            <div className="w-32 h-32 relative  rounded overflow-hidden">
                                 <Image
                                     src={product?.images?.[0] || prodImage}
-                                    alt={`${product.name} image`}
-                                    width={128}
-                                    height={128}
-                                    className="object-cover rounded"
+                                    alt={product.name}
+                                    fill
+                                    sizes="128px"
+                                    className="object-contain mix-blend-multiply hover:mix-blend-multiply transition-all duration-300"
                                 />
                             </div>
 

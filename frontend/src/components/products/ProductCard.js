@@ -18,15 +18,15 @@ const ProductCard = ({ product }) => {
         <div className="bg-slate-100 rounded-lg shadow-md border border-gray-300 p-6 
                         flex flex-col gap-4 hover:shadow-lg transition-all duration-300">
 
-            {/* IMAGE + LINK */}
+
             <Link href={`/categories/${product.category}/${product._id}`}>
-                <div className="flex justify-center items-center h-40  mb-4 cursor-pointer">
+                <div className="relative w-full h-40 mb-4  rounded overflow-hidden cursor-pointer">
                     <Image
                         src={product?.images?.[0]}
                         alt={product.name}
-                        width={160}
-                        height={160}
-                        className="object-contain mix-blend-multiply"
+                        fill
+                        /* sizes="(max-width: 768px) 100vw, 160px" */
+                        className="object-contain p-2 mix-blend-multiply"
                     />
                 </div>
 

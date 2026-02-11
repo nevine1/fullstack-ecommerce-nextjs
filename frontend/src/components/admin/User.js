@@ -8,12 +8,12 @@ import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setIsLoading, updateUser } from "../../store/slices/usersSlice";
 import UpdateRole from "./UpdateRole";
-import UpdateAllUserInfo from "./UpdateAllUserInfo";
+import UpdateAllUserInfo from "./UpdateUserInfo";
 
 const User = ({ user, index }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [showUpdateUserInfo , setShowUpdateUserInfo ] = useState(false)
+  const [showUpdateUserInfo, setShowUpdateUserInfo] = useState(false)
   const [showUpdateRole, setShowUpdateRole] = useState(false);
 
   return (
@@ -38,7 +38,7 @@ const User = ({ user, index }) => {
 
       <div className="flex md:flex-row flex-col gap-2 items-center">
         <p>{user.role}</p>
-        <button
+        <button title="Change user role"
           className="text-green-600 cursor-pointer"
           onClick={() => setShowUpdateRole(true)}
         >
@@ -51,7 +51,7 @@ const User = ({ user, index }) => {
       </p>
 
       <div className="flex md:flex-row flex-col gap-2">
-        <button
+        <button title="Edit user profile"
           className="text-green-600 cursor-pointer"
           onClick={() => setShowUpdateUserInfo(true)}
         >
@@ -72,7 +72,7 @@ const User = ({ user, index }) => {
 
       {
         showUpdateUserInfo && (
-          
+
           <UpdateAllUserInfo
             userId={user._id}
             name={user.name}

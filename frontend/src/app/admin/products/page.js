@@ -2,8 +2,8 @@ import React from 'react'
 import Products from '@/components/admin/products/Products'
 const page = () => {
   return (
-    <div>
-      <Products/>
+    <div className="bg-slate-100 p-6">
+      <Products />
     </div>
   )
 }

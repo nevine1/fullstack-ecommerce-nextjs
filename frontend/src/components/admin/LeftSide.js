@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
 import profileImg from '../../assets/profile.png';
 import Link from 'next/link'
-import { updateUser} from '../../store/slices/usersSlice'
-const LeftSide = ( ) => {
+import { updateUser } from '../../store/slices/usersSlice'
+const LeftSide = () => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.users);
-  
-  
+
+
   return (
     <div className="flex flex-col items-center pt-6">
       {/* Profile Section */}
@@ -29,12 +29,12 @@ const LeftSide = ( ) => {
       <div className="mt-6 w-full px-4">
         <ul className="flex flex-col gap-2">
           <li
-            className="hover:bg-blue-100 px-4 py-2 rounded-md cursor-pointer transition-all duration-300"
+            className="hover:bg-white px-4 py-2 rounded-md cursor-pointer transition-all duration-300"
           >
             <Link href="/admin/all-users">All Users</Link>
           </li>
           <li
-            className="hover:bg-blue-100 px-4 py-2 rounded-md cursor-pointer transition-all duration-300"
+            className="hover:bg-white px-4 py-2 rounded-md cursor-pointer transition-all duration-300"
           >
             <Link href="/admin/products">Products</Link>
           </li>

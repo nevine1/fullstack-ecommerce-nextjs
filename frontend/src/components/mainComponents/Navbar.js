@@ -102,7 +102,7 @@ const Navbar = () => {
 
         <div className="flex items-center gap-4 md:gap-6">
           {/* Cart */}
-          <Link href="/cart" className="relative p-1 hover:bg-gray-100 rounded-full transition-colors">
+          <Link href="/cart" className="relative py-1 px-2 hover:bg-gray-200 rounded-full transition-colors">
             <IoCartOutline className="w-7 h-7 text-gray-700" />
 
             {mounted && cartItems?.length > 0 && (
@@ -156,7 +156,10 @@ const Navbar = () => {
               )}
             </div>
           )}
-
+          { /* admin */}
+          <Link href="/admin" className="relative py-1 px-2 hover:bg-gray-200 hover:text-orange-700 rounded-full transition-colors">
+            Admin
+          </Link>
           {/* Mobile Menu Toggle */}
           <button
             className="md:hidden p-1 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
