@@ -1,8 +1,6 @@
 "use client";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setCartItems, setIsCartLoading } from "@/store/slices/cartSlice";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import { FaPlus, FaMinus } from "react-icons/fa";
@@ -98,13 +96,16 @@ const CartProducts = () => {
                             key={item._id}
                             className="flex items-center gap-6 bg-slate-100 hover:bg-slate-200 p-5 mb-5 rounded-xl shadow-sm hover:shadow-md transition"
                         >
-                            <Image
-                                src={item.productId.images[0]}
-                                alt={item.productId.name}
-                                width={100}
-                                height={100}
-                                className="h-24 w-24 object-cover rounded-lg border"
-                            />
+                            <Link href={`/products/${item.productId._id}`}>
+
+                                <Image
+                                    src={item.productId.images[0]}
+                                    alt={item.productId.name}
+                                    width={100}
+                                    height={100}
+                                    className="h-24 w-24 object-cover rounded-lg border"
+                                />
+                            </Link>
 
                             <div className="flex-1">
                                 <h3 className="text-[16px] text-gray-600 mb-4">

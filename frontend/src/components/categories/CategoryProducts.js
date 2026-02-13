@@ -1,70 +1,83 @@
+"use client";
 
-"use client"
-import { useEffect, useState } from 'react'
-import axios from 'axios'
-import profileImage from '../../assets/profile.png'
-import Image from 'next/image'
-import Link from 'next/link'
+import { useEffect, useState } from "react";
+import axios from "axios";
+import Image from "next/image";
+import Link from "next/link";
+import profileImage from "../../assets/profile.png";
 
 const CategoryProducts = () => {
+  const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
-  const backUrl = process.env.NEXT_PUBLIC_BACKEND_URL
-
-  const [catProducts, setCatProducts] = useState([])
+  const [catProducts, setCatProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchCatProducts = async () => {
     try {
-      const res = await axios.get(`${backUrl}/api/products/get-category-products`);
-      /*  console.log('res is the', res.data) */
-      if (res.data.success) {
+      setLoading(true);
 
+      const res = await axios.get(
+        `${backUrl}/api/products/get-category-products`
+      );
+
+      if (res.data.success) {
         setCatProducts(res.data.data);
       }
     } catch (err) {
-      console.log('Error is for this connection :', err.message)
+      console.log("Error fetching category products:", err.message);
+    } finally {
+      setLoading(false);
     }
-  }
-  /*  console.log('category is', catProducts) */
+  };
 
   useEffect(() => {
-
     fetchCatProducts();
-
-  }, [])
+  }, []);
 
   return (
-    <div className="scrollbar-none bg-red-200 p-10 flex  items-center justify-center sm:overflow-hidden  gap-8 m-4 p-6 bg-white">
-      {
-        catProducts.length > 0 ? catProducts.map((category, index) => (
-          <div key={index}>
-            {
-              category.products.slice(0, 1).map((product, index) => (
-                <div key={index}
-                  className="flex items-center flex-col cursor-pointer gap-2">
+    <div className="bg-white max-w-6xl mx-auto m-4 p-6 rounded-lg shadow-sm">
+      {loading ? (
+        <p className="text-center items-ccenter text-gray-500">Loading categories...</p>
+      ) : catProducts.length > 0 ? (
+        <div className="flex gap-8 overflow-x-auto scrollbar-none">
+          {catProducts.map((category, index) => {
+            const product = category.products?.[0];
 
-                  <Link className="md:h-16 md:w-16 sm:h-16 sm:w-16"
-                    href={`/categories/${category.category}`}
-                  >
-                    <Image
-                      src={product?.images[2]}
-                      alt={product.name}
-                      height={50}
-                      width={50}
-                      className="h-full w-full transition-all duration-300 hover:scale-105 object-fill bg-gray-200 p-2 mix-blend-multiply rounded-full"
-                    />
-                  </Link>
-                  <p className="text-[12px] capitalize">{product?.name.slice(0, 6)}</p>
-                </div>
+            if (!product) return null;
 
-              ))
-            }
-          </div>
-        )) : (
-          <h1>This category has no products</h1>
-        )
-      }
+            return (
+              <div
+                key={index}
+                className="flex flex-col items-center gap-2 cursor-pointer min-w-[80px]"
+              >
+
+                <Link
+                  href={`/categories/${category.category}`}
+                  className="relative h-16 w-16"
+                >
+                  <Image
+                    src={product?.images?.[0] || profileImage}
+                    alt={product.name}
+                    fill
+                    sizes="64px"
+                    className="object-contain rounded-full bg-gray-100 p-2 hover:scale-105 transition-all duration-300"
+                  />
+                </Link>
+
+                <p className="text-xs capitalize text-center">
+                  {category.category}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500">
+          This category has no products
+        </p>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default CategoryProducts
+export default CategoryProducts;

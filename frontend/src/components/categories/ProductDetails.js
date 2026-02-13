@@ -173,7 +173,7 @@ const ProductDetails = () => {
                                py-2 rounded-md border border-orange-500 py-2 px-6
                                hover:bg-white hover:text-orange-500
                                transition-all duration-300"
-                            onClick={handleAddToCart(dispatch, userToken, router)}
+                            onClick={handleAddToCart}
                         >
                             Add to cart
                         </button>

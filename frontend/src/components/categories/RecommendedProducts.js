@@ -20,8 +20,6 @@ const RecommendedProducts = ({ category, currentProductId }) => {
             console.log('all products are:', res.data)
             if (res.data.success) {
                 setCatProducts(res.data.data);
-
-                console.log('prducts are', catProducts)
             }
         } catch (err) {
             console.log('Error fetching all products:', err.message)
@@ -45,8 +43,8 @@ const RecommendedProducts = ({ category, currentProductId }) => {
             <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
                 {
                     finalCatProducts?.length > 0 ? (
-                        finalCatProducts?.map((product, index) => (
-                            <div key={index} >
+                        finalCatProducts?.map((product) => (
+                            <div key={product._id} >
                                 <ProductCart product={product} />
                             </div>
 
