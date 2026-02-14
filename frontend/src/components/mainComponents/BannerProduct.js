@@ -46,7 +46,7 @@ const BannerProduct = () => {
   }, [banners.length]);
 
   return (
-    <div className="container mx-auto px-4 overflow-hidden">
+    <div className="container mx-auto px-4 overflow-hidden ">
       <div className="relative h-72 md:h-96 w-full overflow-hidden">
         <div
           className="flex h-full transition-transform duration-700 ease-in-out"

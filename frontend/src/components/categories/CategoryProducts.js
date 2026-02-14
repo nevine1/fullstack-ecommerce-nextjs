@@ -35,11 +35,11 @@ const CategoryProducts = () => {
   }, []);
 
   return (
-    <div className="bg-white max-w-6xl mx-auto m-4 p-6 rounded-lg shadow-sm">
+    <div className="bg-white max-w-6xl mx-auto items-center text-center m-4 p-6 rounded-lg shadow-sm border border-gray-200 mt-8">
       {loading ? (
-        <p className="text-center items-ccenter text-gray-500">Loading categories...</p>
+        <p className="text-center items-center text-gray-500">Loading categories...</p>
       ) : catProducts.length > 0 ? (
-        <div className="flex gap-8 overflow-x-auto scrollbar-none">
+        <div className="flex gap-8 overflow-x-auto scrollbar-none ">
           {catProducts.map((category, index) => {
             const product = category.products?.[0];
 
@@ -48,7 +48,7 @@ const CategoryProducts = () => {
             return (
               <div
                 key={index}
-                className="flex flex-col items-center gap-2 cursor-pointer min-w-[80px]"
+                className="flex flex-col items-center  mx-auto gap-2 cursor-pointer min-w-[80px]"
               >
 
                 <Link
@@ -60,7 +60,7 @@ const CategoryProducts = () => {
                     alt={product.name}
                     fill
                     sizes="64px"
-                    className="object-contain rounded-full bg-gray-100 p-2 hover:scale-105 transition-all duration-300"
+                    className="object-contain rounded-full bg-gray-200 p-2 hover:scale-105 transition-all duration-300"
                   />
                 </Link>
 

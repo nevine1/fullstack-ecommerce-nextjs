@@ -4,6 +4,7 @@ import CategoryProducts from "@/components/categories/CategoryProducts";
 import BannerProduct from "@/components/mainComponents/BannerProduct";
 import HorizontalProuctCart from "@/components/products/HorizontalProuctCart";
 import HomeProducts from '@/components/products/HomeProducts';
+import HomePageProducts from '@/components/products/HomePageProducts';
 
 export default function Home() {
 
@@ -13,7 +14,8 @@ export default function Home() {
       <CategoryProducts />
       <BannerProduct />
       {/* <HorizontalProuctCart  category={selectedCategory}  /> */}
-      <HomeProducts />
+      {/* <HomeProducts /> */}
+      <HomePageProducts />
     </div>
   );
 }
