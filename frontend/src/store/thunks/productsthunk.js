@@ -15,3 +15,5 @@ export const fetchAllProducts = () => async (dispatch, getState) => {
         dispatch(setIsLoading(false));
     }
 }
+
+
