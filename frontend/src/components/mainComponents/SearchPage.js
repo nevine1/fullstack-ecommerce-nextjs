@@ -6,8 +6,10 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import SearchProductCard from "../products/SearchProductCart";
-
+import { useDispatch } from 'react-redux';
+import { setSearchedCategory } from "@/store/slices/productsSlice";
 const SearchPage = () => {
+    const dispatch = useDispatch();
     const searchParams = useSearchParams();
     const query = searchParams.get("q");
     const [products, setProducts] = useState([]);
@@ -19,13 +21,17 @@ const SearchPage = () => {
         const fetchResults = async () => {
             try {
                 const res = await axios.get(`${backUrl}/api/products/search?q=${query}`);
-                if (res.data.success) setProducts(res.data.data);
+                if (res.data.success) {
+                    setProducts(res.data.data);
+                    dispatch(setSearchedCategory(res.data.data[0]?.category || query));
+                }
             } catch (err) {
                 console.error(err.message);
             }
         };
 
         fetchResults();
+
     }, [query]);
 
     return (
