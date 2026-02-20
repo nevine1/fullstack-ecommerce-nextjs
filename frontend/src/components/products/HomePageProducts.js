@@ -33,7 +33,7 @@ const HomePageProducts = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
                 {/* part 1 , categories with dynamic photos*/}
-                <div className="bg-slate-50 border border-gray-200 rounded-lg p-4">
+                <div className="bg-slate-50 flex flex-col gap-4 border border-gray-200 rounded-lg p-4">
                     <h2 className="font-semibold mb-4 text-lg border-b pb-2 text-orange-600">Categories</h2>
                     <div className=" gap-4 grid grid-cols-2">
                         {categories?.slice(0, 4).map((category, index) => {
@@ -64,7 +64,7 @@ const HomePageProducts = () => {
                             );
                         })}
                     </div>
-                    <button className="text-orange-600 hover:text-orange-700 font-medium"> Discover more </button>
+                    <Link href="/categories" className="text-orange-600 text-center hover:text-orange-700 py-4 mx-auto font-medium"> Discover more </Link>
                 </div>
 
                 {/* part2: filtered category's proucts' */}
@@ -121,24 +121,38 @@ const HomePageProducts = () => {
                 </div>
 
             </div>
+
+
             { /* related searched products */}
+
             {lastSearchedCategory && (
-                <div className="mt-10">
-                    <h2 className="text-xl font-bold mb-4">
+                <div className="mt-14 flex flex-col items-center gap-8">
+                    <h2 className="text-2xl font-bold text-gray-800">
                         Related to Your Search
                     </h2>
 
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 w-full max-w-6xl mx-auto">
                         {relatedSearchedProducts.slice(0, 4).map((product) => (
-                            <div key={product._id} className="border p-3 rounded">
-                                <Image
-                                    src={product.images[0]}
-                                    alt={product.name}
-                                    width={150}
-                                    height={150}
-                                />
-                                <p className="text-sm mt-2">{product.name}</p>
-                            </div>
+                            <Link
+                                key={product._id}
+                                href={`/products/${product._id}`}
+                                className="bg-white rounded-xl shadow-sm hover:shadow-md 
+                                    transition-all duration-300 p-4 flex flex-col 
+                                    items-center text-center border border-orange-100"
+                            >
+                                <div className="relative w-28 h-28 mb-4">
+                                    <Image
+                                        src={product.images[0]}
+                                        alt={product.name}
+                                        fill
+                                        className="object-contain"
+                                    />
+                                </div>
+
+                                <p className="text-sm text-gray-600 line-clamp-2">
+                                    {product.name}
+                                </p>
+                            </Link>
                         ))}
                     </div>
                 </div>

@@ -4,6 +4,7 @@ const productsSlice = createSlice({
     name: 'products',
     initialState: {
         products: [],
+        categoryProducts: [],
         lastSearchedCategory: null,
         isLoading: false,
         productInfo: null,
@@ -24,9 +25,13 @@ const productsSlice = createSlice({
         },
         setSearchedCategory: (state, action) => {
             state.lastSearchedCategory = action.payload;
+        },
+        setCatgoryProducts: (state, action) => {
+            state.categoryProducts = action.payload;
         }
     }
 })
 
-export const { setProducts, setIsLoading, setUpdatedProduct, setProductDetails, setSearchedCategory } = productsSlice.actions;
+export const { setProducts, setIsLoading, setUpdatedProduct, setProductDetails,
+    setSearchedCategory, setCatgoryProducts } = productsSlice.actions;
 export default productsSlice.reducer;

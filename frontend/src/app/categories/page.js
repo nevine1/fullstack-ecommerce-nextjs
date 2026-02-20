@@ -1,9 +1,12 @@
-import Category from "@/components/categories/Category"
+
+import AllCategories from "@/components/categories/AllCategories";
+import { useSelector } from "react-redux";
 
 const page = () => {
+
     return (
         <div>
-            <h1>Hello categoryies page</h1>
+            <AllCategories />
         </div>
     )
 }
