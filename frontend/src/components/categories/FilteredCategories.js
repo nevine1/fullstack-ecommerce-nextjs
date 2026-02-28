@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { fetchAllProducts } from "@/store/thunks/productsthunk"
 import { addToCart } from "@/store/thunks/cartThunk"
 import Image from "next/image"
-
+import Link from "next/link"
 const FilteredCategories = () => {
     const dispatch = useDispatch()
     const { products = [] } = useSelector((state) => state.products)
@@ -81,10 +81,10 @@ const FilteredCategories = () => {
                     className={`${showFilters ? "block" : "hidden"
                         } md:block w-full md:w-64 bg-slate-100 p-6 rounded-lg shadow-sm`}
                 >
-                    <h2 className="text-lg font-semibold mb-4">Filters</h2>
+                    <h2 className="text-lg font-semibold mb-4">Sort by:</h2>
 
                     {/* sorting type */}
-                    <div className="mb-6">
+                    <div className="mb-6 ">
                         <p className="font-medium mb-2">Sort by price</p>
 
                         <div className="flex items-center gap-2 mb-2">
@@ -93,7 +93,7 @@ const FilteredCategories = () => {
                                 name="sort"
                                 onChange={() => handleSortChange("lowToHigh")}
                             />
-                            <span>Low to High</span>
+                            <span className="text-gray-700 text-sm">Price: Low to High</span>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -102,13 +102,13 @@ const FilteredCategories = () => {
                                 name="sort"
                                 onChange={() => handleSortChange("highToLow")}
                             />
-                            <span>High to Low</span>
+                            <span className="text-gray-700 text-sm">Price: High to Low</span>
                         </div>
                     </div>
 
                     {/* all categories */}
                     <div>
-                        <p className="font-medium mb-2">Categories</p>
+                        <p className="font-bold mb-2">Categories</p>
 
                         {categories.map((category, index) => (
                             <div key={index} className="flex items-center gap-2 mb-2">
@@ -117,7 +117,7 @@ const FilteredCategories = () => {
                                     checked={selectedCategories.includes(category)}
                                     onChange={() => handleCategoryChange(category)}
                                 />
-                                <label>{category}</label>
+                                <label className="text-gray-700 text-sm">{category}</label>
                             </div>
                         ))}
                     </div>
@@ -138,12 +138,15 @@ const FilteredCategories = () => {
                             >
 
                                 <div className="relative w-full h-40 mb-4">
-                                    <Image
-                                        src={product.images[0]}
-                                        alt={product.name}
-                                        fill
-                                        className="object-contain mix-blend-multiply"
-                                    />
+                                    <Link href={`/categories/${product.category}/${product._id}`}>
+
+                                        <Image
+                                            src={product.images[0]}
+                                            alt={product.name}
+                                            fill
+                                            className="object-contain mix-blend-multiply"
+                                        />
+                                    </Link>
                                 </div>
 
 
@@ -155,8 +158,9 @@ const FilteredCategories = () => {
                                     {product.category}
                                 </p>
 
-                                <p className="font-semibold mb-4 text-orange-500">
-                                    ${product.price}
+                                <p className=" flex flex-row gap-4 mb-4 text-orange-500">
+                                    <span>${product.price}</span>
+                                    <span className="line-through text-gray-500 text-sm">${product.sellingPrice}</span>
                                 </p>
 
 

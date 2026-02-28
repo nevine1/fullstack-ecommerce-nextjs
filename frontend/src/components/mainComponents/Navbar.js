@@ -28,9 +28,9 @@ const Navbar = () => {
 
   const menuItems = [
     { name: "Shop", href: "/" },
-    { name: "Women", href: "/women" },
-    { name: "Men", href: "/men" },
-    { name: "Kids", href: "/kids" },
+    { name: "Categories", href: "/categories" },
+    { name: "Cart", href: "/cart" },
+
   ];
 
   const handleSearch = () => {
