@@ -29,7 +29,7 @@ const Navbar = () => {
   const menuItems = [
     { name: "Shop", href: "/" },
     { name: "Categories", href: "/categories" },
-    { name: "Cart", href: "/cart" },
+
 
   ];
 
