@@ -23,6 +23,10 @@ connectCloudinary();
 app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
+
+app.get('/', (req, res) => {
+  res.json({ message: 'API is running ' });
+});
 app.listen(port, () => {
   console.log('server is running on port', port);
 });

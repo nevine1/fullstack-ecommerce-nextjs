@@ -44,6 +44,12 @@ const SearchPage = () => {
                 <p>No products found 😔</p>
             ) : (
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <h1>
+                        {
+                            products.length === 1 ? "1 Result found" : `${products.length} Results found `
+                        }
+                        for {query}:
+                    </h1>
                     {products.map((product) => (
                         <SearchProductCard product={product} key={product._id} />
 
